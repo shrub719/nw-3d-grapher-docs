@@ -6,6 +6,12 @@ For my A level Computer Science NEA.
 
 ## Installation
 
+### NumWorks Calculator
+1. Go to the [latest release](https://github.com/shrub719/fun-numworks-apps/releases/latest)
+1. Download the `grapher-3d.nwa`
+1. Connect to your calculator by USB
+1. Go to the [Numworks Installer](https://my.numworks.com/apps) and click Connect (make sure your browser has WebUSB capability)
+1. Upload `grapher-3d.nwa` file and press Install
 
 
 ## Structure

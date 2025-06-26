@@ -1,0 +1,31 @@
+# Objectives
+
+1. Grapher input
+    1. Parse mathematical text input
+    1. Use the EADK Ion interface to take input from the user
+        1. Accept alphanumeric key presses as text input
+        1. Handle all special keys on the calculator as shortcuts for specific functions
+    1. Graph configuration
+        1. Toggle graph type (see 4. Graph generation)
+        1. Set the range of parametric equations
+2. Poincaré/Pompeiu
+    1. Convert parsed mathematical text input into a tree of evaluatable functions
+    1. Implement function evaluation/calculation
+        1. Arithmetic operators
+        1. Trigonometric approximations
+        1. Inverse trigonometric approximations
+        1. Indices, including negative and fractional
+        1. Exponents and logarithms
+3. Interface & controls
+    1. Allow for switching between multiple input modes
+    1. Handle D-pad input for graph manipulation
+    1. Display relevant information using a UI bar
+4. Graph generation
+    1. $z = f(x, y)$ (explicit functions) — Systematically generate a grid of points by evaluating a parsed function
+    1. $x, y, z = f(t)$ (parametric functions) — Systematically generate all points in the domain of a parsed parametric function
+    1. $f(x, y, z) = 0$ (implicit functions) — Generate a triangular mesh from a parsed implicit function using a marching cubes algorithm
+5. Graph display
+    1. Toggle between wireframe and solid display
+    1. Support grid (explicit), list (parametric) and mesh (implicit) point formats
+    1. Lighting
+        1. [???]
