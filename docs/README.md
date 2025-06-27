@@ -8,4 +8,4 @@ A 3D graphing application for the NumWorks calculator with support for implicit 
 ## Contents
 
 0. [Notes](notes.md)
-1. [Analysis](1.%20Analysis/)
+1. [Analysis](1.%20Analysis/README.MD)
