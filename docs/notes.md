@@ -1,10 +1,10 @@
-## Marching cubes
+## Rendering
 - how many polygons can n0120 store in memory?
     - **256 KB** static RAM
     - to account for other program stuff and play it safe, say there's **100 KB**
     - 1 point is 3 `floats`, 4 B * 3 = **12 B**
     - 1 polygon is 3 vertices, 12 B * 3 = **36 B**
-    - 256 KB / 36 B  = **3000 polygons**
+    - 100 KB / 36 B  = **3000 polygons**
     - but polygons will usually be touching
         - touching vertices can be stored as `usize` pointers
             - this sounds actually a bit weird to do, maybe not possible
@@ -12,6 +12,15 @@
         - on average a polygon will be 1 vertex and 2 pointers, which is **20 B**
         - 256 KB / 20 B = **5000 polygons**
     - this is good news right !!
+- how many pixels can you store in a buffer to push at once? 
+    - avoids super long eadk screen stuff
+    - one pixel/`Color` is `uint32_t` which is **4 B**
+    - 100 KB / 4 B = **25 000 pixels** in a buffer, theoretically
+    - 320 * 240 = **76 800 pixels** on the screen in total
+        - 1/2 screen: 320 * 240 * 1/4 = **19 200 pixels** (< 25 000)
+        - 3/4 screen: 240 * 180 = **43 200 pixels** (fits in 200 KB...)
+        - can't scale; has to be 1/2 of screen
+        - could tile 4 times ! 4 rects is not that much
 
 ## Makefile
 - line ~21: -stc=c99
@@ -19,5 +28,6 @@
     - is this needed for storage.c
     - recode storage.c?
 
-## GH
+## Nwlink
 - could use the same protocol nw uses to load to calc? just as a fun extra thing
+- how to run in emulator
