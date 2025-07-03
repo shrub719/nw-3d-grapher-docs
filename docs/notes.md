@@ -12,6 +12,19 @@
         - on average a polygon will be 1 vertex and 2 pointers, which is **20 B**
         - 256 KB / 20 B = **5000 polygons**
     - this is good news right !!
+    - research data structures!!
+        - octree
+        - reference table thing
+        - The Data Structure
+    - how the other one generates the wireframe
+        - starts from a corner, expands diagonally then closes back in
+        - not THAT many corners to store
+- algorithm
+    - marching cubes
+        - how do i store/generate polygons?
+    - raymarching
+        - implicit functions aren't always sdf's...
+            - does this not affect marching cubes too??
 - how many pixels can you store in a buffer to push at once? 
     - avoids super long eadk screen stuff
     - one pixel/`Color` is `uint32_t` which is **4 B**
@@ -21,6 +34,10 @@
         - 3/4 screen: 240 * 180 = **43 200 pixels** (fits in 200 KB...)
         - can't scale; has to be 1/2 of screen
         - could tile 4 times ! 4 rects is not that much
+            - Python doesn't have support for pushing rects like that... so hopefully i'm faster
+- speed
+    - the other programs are REALLY slow
+    - especially when drawing lines (with that one algorithm?) because they push pixel per pixel
 
 ## Makefile
 - line ~21: -stc=c99
