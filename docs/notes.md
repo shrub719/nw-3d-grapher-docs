@@ -19,12 +19,6 @@
     - how the other one generates the wireframe
         - starts from a corner, expands diagonally then closes back in
         - not THAT many corners to store
-- algorithm
-    - marching cubes
-        - how do i store/generate polygons?
-    - raymarching
-        - implicit functions aren't always sdf's...
-            - does this not affect marching cubes too??
 - how many pixels can you store in a buffer to push at once? 
     - avoids super long eadk screen stuff
     - one pixel/`Color` is `uint32_t` which is **4 B**
@@ -38,6 +32,27 @@
 - speed
     - the other programs are REALLY slow
     - especially when drawing lines (with that one algorithm?) because they push pixel per pixel
+- Numcraft Rust
+    - runs at 50+ fps with way more triangles than i will ever have 
+
+## Graph gen
+- algorithm
+    - marching cubes
+        - how do i store/generate polygons?
+    - raymarching
+        - implicit functions aren't always sdf's...
+            - does this not affect marching cubes too?? e.g. tangent of tan graph
+    - which order do i generate points
+        - need to minimise:
+            - points stored in memory (?)
+            - points recalculated (so that they actually share vertices!!)
+        - follow the same diagonal scan as that one py script?
+- how do i apply transformations
+    - could generate points, then apply transformation with matrix
+        - need to be smart about domain
+        - would mean that you don't need to regenerate most points
+    - could apply inverse of transformation matrix to every point being fed in to marching cubes
+        - means any transformation requires regeneration of all points
 
 ## Makefile
 - line ~21: -stc=c99
