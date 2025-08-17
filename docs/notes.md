@@ -63,3 +63,7 @@
 ## Nwlink
 - could use the same protocol nw uses to load to calc? just as a fun extra thing
 - how to run in emulator
+
+## Poincare/Pompeiu
+
+- https://www.numworks.com/blog/improved-parser/
