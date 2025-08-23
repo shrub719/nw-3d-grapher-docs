@@ -67,3 +67,9 @@
 ## Poincare/Pompeiu
 
 - https://www.numworks.com/blog/improved-parser/
+
+## Other
+
+- screenshots/image saving
+    - nwagyu's png viewer says this - https://github.com/nwagyu/pngviewer?tab=readme-ov-file#faq
+    - does that mean it's possibe to load/save larger images (like the whole screen) but a little more difficult?
