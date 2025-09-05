@@ -80,4 +80,7 @@
 - indent (?) headings one more level, to make space for titles like 1. Analysis or 2. Design??
     - or add some other way for title pages/contents
     - maybe a py file instead of pandoc's dumb cat
+- move/link to assets (images don't display)
+- automate contents of each section
+    - make them their own standalone files?? does it generate one big contents then still?
     
