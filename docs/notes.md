@@ -74,3 +74,10 @@
 - screenshots/image saving
     - nwagyu's png viewer says this - https://github.com/nwagyu/pngviewer?tab=readme-ov-file#faq
     - does that mean it's possibe to load/save larger images (like the whole screen) but a little more difficult?
+
+## Docs/meta
+
+- indent (?) headings one more level, to make space for titles like 1. Analysis or 2. Design??
+    - or add some other way for title pages/contents
+    - maybe a py file instead of pandoc's dumb cat
+    
