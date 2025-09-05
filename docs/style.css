@@ -5,7 +5,7 @@
 
 body {
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-    padding: 5% 7.5% 5% 7.5%;
+    padding: 0 7.5% 0 7.5%;
     font-size: 15px;
 }
 
@@ -33,4 +33,8 @@ h2 {
 
 h3 {
     font-size: 1.2rem;
+}
+
+.math.inline {
+    font-family: Times, serif;
 }
