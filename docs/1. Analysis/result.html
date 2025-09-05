@@ -1,0 +1,364 @@
+<h1 id="end-user">1.1 End User</h1>
+<h1 id="current-solutions">1.2 Current solutions</h1>
+<!-- Desmos?? -->
+<p>The capability of graphing in 3 dimensions is very desired of a
+graphing calculator, and as such many attempts have been made to provide
+the NumWorks calculators with this functionality. However, due to the
+limited capabilities of embedded hardware and the complexity of implicit
+graphs, these existing solutions fail to meet all the requirements of my
+end user.</p>
+<h2 id="mtys-draw_3d_graph">mty’s draw_3d_graph <a
+href="https://my.numworks.com/python/mty/draw_3d_graph">🔗</a></h2>
+<figure>
+<img src="assets/draw_3d_graph.png" alt="Screenshot of draw_3d_graph" />
+<figcaption aria-hidden="true">Screenshot of draw_3d_graph</figcaption>
+</figure>
+<p>draw_3d_graph is a Python script written for NumWorks’ MicroPython
+implementation. It takes an explicit function <span
+class="math inline"><em>z</em> = <em>f</em>(<em>x</em>,<em>y</em>)</span>
+and graphs it</p>
+<h2 id="vnap0vs-surf3d">vnap0v’s surf3d <a
+href="https://my.numworks.com/python/vnap0v/surf3d">🔗</a></h2>
+<figure>
+<img src="assets/surf3d.png" alt="Screenshot of surf3d" />
+<figcaption aria-hidden="true">Screenshot of surf3d</figcaption>
+</figure>
+<p>surf3d is a Python script written for NumWork’s MicroPython
+implementation.</p>
+<h2 id="adi-dfs-complex-numworks">Adi-df’s Complex Numworks <a
+href="https://github.com/Adi-df/complex-numworks">🔗</a></h2>
+<blockquote>
+<p>The compiled .nwa in the <a
+href="https://github.com/Adi-df/complex-numworks/releases/tag/0.2.0">latest
+release</a> doesn’t load to the calculator and has a size of NaN KB.</p>
+</blockquote>
+<!-- TODO: build it yourself -->
+<p>Complex Numworks is a compiled Rust application for the NumWorks
+calculators distributed as an .nwa file.</p>
+<h2 id="yannis300307s-numcraftrust">yannis300307’s NumcraftRust <a
+href="https://github.com/yannis300307/NumcraftRust">🔗</a></h2>
+<p><img src="https://private-user-images.githubusercontent.com/52321382/484338832-e704a3fb-6b2d-4f88-a660-9e3f469bf65d.png?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3NTY4NTA4MjIsIm5iZiI6MTc1Njg1MDUyMiwicGF0aCI6Ii81MjMyMTM4Mi80ODQzMzg4MzItZTcwNGEzZmItNmIyZC00Zjg4LWE2NjAtOWUzZjQ2OWJmNjVkLnBuZz9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNTA5MDIlMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjUwOTAyVDIyMDIwMlomWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPWRiOGM1MDViNDg0NDhmYTE5M2Y5MDY1ZWRkNTQ0OWVlODYyZDdhNWY1Mjg3ZTM0MzIyOTFhYTU4ZTQzY2M4MzQmWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0In0.y3bx2MHLramx3ibsIrxnx65rv703JD3HBR5TUgueIjU" alt="Screenshot of NumcraftRust from GitHub" width="320"></p>
+<p>NumcraftRust is a compiled Rust application for the NumWorks
+calculators distributed as an .nwa file. It is not a 3D graphing program
+at all, but it accomplishes the same task of a 3D rendering engine
+operating within the limited hardware of the NumWorks calculators. The
+application is an implementation of a basic cube sandbox game with
+movement, building and breaking mechanics.</p>
+<p>The game runs at an average of 20 FPS on the N0100 and N0110, and at
+50 FPS on the N120. This remains relatively stable even with thousands
+of polygons on the screen. Screen tearing is minimal and frames are
+drawn smoothly with no flickering. Various optimisations mean the
+application runs responsively enough for a positive user experience.</p>
+<p>While its accomplishments are similar to what a 3D grapher should do,
+it obviously has no 3D graphing functionality. The purpose of the
+program is very different yet it still provides a solution to one of the
+problems faced by this project.</p>
+<h2 id="khicasxcas">KhiCAS/XCAS <a
+href="https://www-fourier.univ-grenoble-alpes.fr/~parisse/numworks/nws_en.html">🔗</a></h2>
+<figure>
+<img src="assets/khicas.png" alt="Screenshot of KhiCAS" />
+<figcaption aria-hidden="true">Screenshot of KhiCAS</figcaption>
+</figure>
+<p>KhiCAS is a small, yet powerful Computer Algebra System that was
+ported to the NumWorks calculators <!-- by whom? --> as an app with a
+custom installation protocol. It implements its own mathematical
+statement parsing system.</p>
+<h2 id="fx-cg50-3d-graph">FX-CG50 3D Graph <a
+href="https://education.casio.co.uk/support/os-files/os-files-cg50-add-ins/">🔗</a></h2>
+<figure>
+<img src="assets/casio.png" alt="Screenshot of 3D Graph" />
+<figcaption aria-hidden="true">Screenshot of 3D Graph</figcaption>
+</figure>
+<figure>
+<img src="assets/casio-trace.png"
+alt="Screenshot of 3D Graph’s trace function" />
+<figcaption aria-hidden="true">Screenshot of 3D Graph’s trace
+function</figcaption>
+</figure>
+<figure>
+<img src="assets/casio-vwin.png"
+alt="Screenshot of 3D Graph’s view window" />
+<figcaption aria-hidden="true">Screenshot of 3D Graph’s view
+window</figcaption>
+</figure>
+<figure>
+<img src="assets/casio-solve.png"
+alt="Screenshot of 3D Graph’s G-Solve function" />
+<figcaption aria-hidden="true">Screenshot of 3D Graph’s G-Solve
+function</figcaption>
+</figure>
+<p>The Casio fx-CG50 calculator has an official application for 3D
+graphing. Although the application comes installed with the calculator,
+it is not part of the suite of built-in apps and needs to be reinstalled
+manually as an add-in from a computer if the calculator is reset or
+crashes.</p>
+<p>The application can only graph certain types of 3D graphs, limited to
+primitives such as spheres, cones, planes and cylinders. However, it
+allows the user to trace each function drawn, as well as rotating and
+scaling the viewport. Translating the graph is unintuitive, done
+numerically via the View Window. Graphs and points are saved between
+sessions so that the same graph only needs to be calculated once.</p>
+<p>The fx-CG50 3D Graph app exemplifies what the user experience should
+look like when displaying the graph, although a few of the graph
+manipulation methods are not very user-friendly. Despite this, it is
+limited in capability with regards to explicit and implicit functions
+despite the fx-CG50’s 2D grapher having support for those. The program
+only functions on the fx-CG50 and is not compatible with any other
+calculators.</p>
+<h2 id="desmos-3d">Desmos 3D <a
+href="https://www.desmos.com/3d">🔗</a></h2>
+<p><img src="assets/desmos.png" alt="Screenshot of Desmos 3D" width="400"></p>
+<p>Desmos, a website that host free maths tools, has a beta test of a 3D
+graphing program to go alongside their 2D grapher. Built on the same
+system as the 2D grapher, it is smooth and feature-complete, and runs on
+most browsers using JavaScript.</p>
+<p>The user experience is extremely positive, with a large feature set
+including variable sliders, animation and possible due to the capability
+of computer hardware. The program also offers several QOL features like
+custom colouring, domains, and labels for different functions. Graph
+manipulation is intuitive using keyboard &amp; mouse controls.</p>
+<p>The program is capable of plotting all kinds of graphs, including
+implicit functions, although it can trip up on complex surfaces
+involving tangents and undefined points.</p>
+<h1 id="target-audience">1.3 Target audience</h1>
+<p>3D Grapher is aimed at anybody using a NumWorks calculator for 3D
+mathematics, primarily students and teachers of A Level Further
+Mathematics.</p>
+<p>The program aims to provide them with a simple to use, performative
+and feature-complete graphing app to use for the parts of the
+specification that include 3 dimensional graphs, in order to level the
+playing field between users of different calculators. It aims most of
+all to be a teaching aide that integrates itself into the workflow of A
+Level Further Mathematics classes.</p>
+<h1 id="project-summary">1.4 Project summary</h1>
+<p>3D Grapher is an application for the NumWorks graphing calculator
+meant to extend its graphing capabilities to 3 dimensions. It provides
+functionality similar to the fx-CG50’s 3D Graph app, allowing users to
+plot, display and manipulate graphs with 3 variables.</p>
+<p>Users are able to enter explicit, parametric or implicit functions as
+a string which is parsed and plotted. The resulting graph can be viewed,
+rotated, scaled, translated and more to allow users to explore the
+graph’s shape and domain.</p>
+<h1 id="relevant-research">1.5 Relevant research</h1>
+<!-- 
+- desmos is used a lot
+    - https://www.desmos.com/about#:~:text=Our%20free%20suite%20of%20math,the%20world.
+- calculators are bought a lot
+    - https://www.amazon.co.uk/Casio-FX-CG50-CASIO-Graphic-Calculator/dp/B071S1HRM7?th=1
+    - https://www.amazon.co.uk/NumWorks-Graphic-calculator-numworks/dp/B0747RQGF5
+    - https://www.amazon.co.uk/gp/bestsellers/officeproduct/201036031
+- calculators are bought a lot - by STUDENTS in SCHOOLS
+    - https://www.numworks.com/educators/offers/
+    - https://education.casio.co.uk/teachers-and-schools/
+- 3d graphs are used a lot - in a level further mathematics
+    - ummmmm
+use numbers!!
+-->
+<h2 id="target-market">Target Market</h2>
+<p>Graphing calculators are <a
+href="https://www.amazon.co.uk/gp/bestsellers/officeproduct/201036031">very
+popular</a> with students of secondary and sixth form ages especially -
+manufacturers like <a
+href="https://education.casio.co.uk/teachers-and-schools/">Casio</a> and
+<a href="https://www.numworks.com/educators/offers/">NumWorks</a> have
+bulk offers aimed at educators, purely because graphing calculators have
+such high educational value. Graphing programs - like built-in
+calculator applications, or websites like <a
+href="https://www.desmos.com/about#:~:text=Our%20free%20suite%20of%20math,the%20world">Desmos</a>
+are often desired by teachers for visually demonstrating various parts
+of the syllabus.</p>
+<p>The <a
+href="https://qualifications.pearson.com/content/dam/pdf/A%20Level/Mathematics/2017/specification-and-sample-assesment/a-level-l3-further-mathematics-specification.pdf">A
+Level Further Mathematics specification</a> has many areas in which
+graphs in 3 dimensions are relevant to course content, such as vectors
+&amp; geomtetry, multivariable calculus, and modelling. As a result,
+current solutions do exist to attempt to give educators the tools they
+need, yet fail to be integrated in the classroom.</p>
+<h2 id="algorithms">Algorithms</h2>
+<p>Several solutions exist for producing a mesh of points from an
+implicit surface - this will be necessary for rasterizing implicit
+graphs (see <a href="1.7%20Objectives.md">1.7 Objectives</a>). I’ve
+chosen to use an algorithm called marching cubes because of its ease of
+integration with <a
+href="https://graphics.stanford.edu/~mdfisher/MarchingCubes.html">creating
+tris</a> from its geometric mesh for rendering. With appropriately
+chosen interpolation methods, the mesh produced can show an <a
+href="https://graphics.stanford.edu/~mdfisher/MarchingCubes.html">accurate
+image of 3D implicit graphs</a> to the user.</p>
+<h1 id="methods-and-sources">1.6 Methods and sources</h1>
+<!-- apparently i also need to talk about algorithms... i could write PAGES about marching cubes oh god -->
+<h2 id="platform">Platform</h2>
+<p>There are various ways to write software for the NumWorks calculator,
+with varying degrees of control and compatibility. NumWorks provides
+several <a
+href="https://github.com/search?q=org%3Anumworks+epsilon-sample-app&amp;type=repositories">sample
+applications</a> on their GitHub which I used to research the different
+methods available.</p>
+<p>NumWorks offers Epsilon App Development Kits for <a
+href="https://github.com/numworks/epsilon/blob/9072ab80a16d4c15222699f73896282a65eecd54/eadk/include/eadk/eadk.h#L4">C</a>,
+<a
+href="https://github.com/numworks/epsilon-sample-app-cpp/blob/master/src/eadkpp.h">C++</a>
+and <a
+href="https://github.com/numworks/epsilon-sample-app-rust/blob/master/src/eadk.rs">Rust</a>
+which expose common I/O endpoints and type utilities. The EADK provides
+no reason to choose any language over another.</p>
+<p>However, each language has its advantages: C is the most lightweight,
+and typically the easiest to write clean, efficient code for. C++’s
+object oriented additions as a superset of C gives greater structure
+while adding complexity. Rust is a more modern language similar in level
+to C++, while capable of producing faster programs.
+<!-- maybe work on these descriptions.. --><br />
+Due to my personal experience with C/C++ and the complexity of the
+project, C++ will be the language of choice for the 3D Grapher.</p>
+<p>In addition, NumWorks details how you can develop your own <a
+href="https://www.numworks.com/engineering/software/build/">userland
+version of Epsilon</a> written in C++. Other developers have used this
+to create custom apps that function just like built-in Epsilon ones,
+which gives greater control over the API without the need of the EADK as
+a middleman. It also gives access to tools in the Epsilon architecture -
+most importantly <a
+href="https://www.numworks.com/engineering/software/poincare/">Poincaré</a>,
+the native mathematical expression parser, which I would use in my
+code.</p>
+<figure>
+<img
+src="https://www.numworks.com/engineering/software/architecture-58716913.svg"
+alt="Epsilon’s architecture" />
+<figcaption aria-hidden="true">Epsilon’s architecture</figcaption>
+</figure>
+<p>This comes with a few drawbacks, most notably a complicated
+development cycle. Epsilon versions 16+ make it very difficult to load
+userland and have locked down much of the calculators developmental
+capabilties. This makes the testing and debugging process rather
+difficult without the convenience that comes from loading
+<code>.nwa</code> files.<br />
+Applications also become more difficult to distribute as they become
+part of a custom version of Epsilon, although the community has
+developed some standards
+<!-- that one issue on a newbie's epsilon app?? check reddit -->.
+NumWorks’ licenses also make this distribution legally grey (see <a
+href="https://github.com/numworks/epsilon/issues/38">Issue #38</a>).</p>
+<h2 id="libraries">Libraries</h2>
+<p>Aside from the development kit, a few libraries make for convenient
+shorcuts for performing memory-related tasks.</p>
+<p><a href="https://github.com/Yaya-Cout">Yaya-Cout’s</a>‘s library <a
+href="https://framagit.org/Yaya.Cout/numworks-extapp-storage">NumWorks
+Extapp Storage</a> uses some memory hacks to allow external apps to save
+records in the NumWorks’ memory. Documentation is available <a
+href="https://yaya-cout.github.io/Nwagyu/reference/apps/storage.html">here</a>.
+<code>storage.c</code> and <code>storage.h</code> can easily be added,
+<code>#include</code>d and compiled with the app. This library is
+essential for persistent storage between sessions of the app, such as
+saving calculated graphs or settings.</p>
+<p><a href="https://zlib.net/">zlib</a> and <a
+href="https://www.libpng.org/pub/png/libpng.html">libpng</a> are other
+lightweight libraries for image manipulation suited for the NumWorks, as
+evidenced by Nwagyu’s <a
+href="https://github.com/nwagyu/pngviewer?tab=readme-ov-file#dependencies">PNG
+Viewer</a>. These libraries would be used to save screenshots of
+displayed graphs.</p>
+<!-- mathematical parser JIC -->
+<h1 id="objectives">1.7 Objectives</h1>
+<ol type="1">
+<li><strong>Grapher input</strong>
+<ol type="1">
+<li>Parse mathematical text input</li>
+<li>Use the EADK Ion interface to take input from the user
+<ol type="1">
+<li>Accept alphanumeric key presses as text input</li>
+<li>Handle all special keys on the calculator as shortcuts for specific
+functions</li>
+</ol></li>
+<li>Graph configuration
+<ol type="1">
+<li>Toggle graph type (see <strong>4. Graph generation</strong>)</li>
+<li>Set the domain of parametric equations</li>
+</ol></li>
+</ol></li>
+<li><strong>Poincaré/Pompeiu</strong>
+<ol type="1">
+<li>Convert parsed mathematical text input into a tree of evaluatable
+functions</li>
+<li>Implement function evaluation/calculation
+<ol type="1">
+<li>Arithmetic operators</li>
+<li>Trigonometric approximations</li>
+<li>Inverse trigonometric approximations</li>
+<li>Indices, including negative and fractional</li>
+<li>Exponents and logarithms</li>
+</ol></li>
+</ol></li>
+<li><strong>Interface &amp; controls</strong>
+<ol type="1">
+<li>Allow for switching between multiple input modes (TRACE, TRANSLATE,
+ROTATE, SCALE)</li>
+<li>Handle D-pad input for graph manipulation</li>
+<li>Display relevant information using a UI bar</li>
+</ol></li>
+<li><strong>Graph generation</strong>
+<ol type="1">
+<li><span
+class="math inline"><em>z</em> = <em>f</em>(<em>x</em>,<em>y</em>)</span>
+(explicit functions) — Systematically generate a grid of points by
+evaluating a parsed function</li>
+<li><span
+class="math inline"><em>x</em>, <em>y</em>, <em>z</em> = <em>f</em>(<em>t</em>)</span>
+(parametric functions) — Systematically generate all points in the
+domain of a parsed parametric function</li>
+<li><span
+class="math inline"><em>f</em>(<em>x</em>,<em>y</em>,<em>z</em>) = 0</span>
+(implicit functions) — Generate a triangular mesh from a parsed implicit
+function using a marching cubes algorithm</li>
+</ol></li>
+<li><strong>Graph manipulation</strong>
+<ol type="1">
+<li>Implement different manipulation modes, with separate controls for
+each axis (<strong>3. Interface &amp; controls</strong>)
+<ol type="1">
+<li>TRANSLATE - adjustment of domain start/end</li>
+<li>ROTATE - rotation of 3D domain relative to the camera</li>
+<li>SCALE - adjustment of domain size (and resolution)</li>
+</ol></li>
+<li>Interpret manipulations as a single (inverse) transformation
+matrix</li>
+</ol></li>
+<li><strong>Graph display</strong>
+<ol type="1">
+<li>Grid (explicit) and list (parametric) point formats
+<ol type="1">
+<li>Toggle between wireframe and solid point display</li>
+</ol></li>
+<li>Mesh (implicit) point formats
+<ol type="1">
+<li>Draw wireframe of polygons</li>
+</ol></li>
+<li>Mesh rasterisation
+<ol type="1">
+<li>Render graph on screen with tris</li>
+</ol></li>
+<li>Allow for graph tracing (<strong>3. Interface &amp;
+controls</strong>)</li>
+</ol></li>
+</ol>
+<h1 id="proposed-solution">1.8 Proposed solution</h1>
+<h1 id="modelling">1.9 Modelling</h1>
+<p>Graph manipulation is an important part of the application - it’s the
+way the user explores graphs they have created, which is crucial to the
+classroom workflow when learning using the 3D Grapher. This prototype
+demonstrates graph manipulation on several simple 3D objects plotted as
+a set of points.</p>
+<!-- add code? -->
+<h1 id="analysis">1. Analysis</h1>
+<h2 id="contents">Contents</h2>
+<ol type="1">
+<li><a href="1.1%20End%20user.md">End user</a></li>
+<li><a href="1.2%20Current%20solutions.md">Current solutions</a></li>
+<li><a href="1.3%20Target%20audience.md">Target audience</a></li>
+<li><a href="1.4%20Project%20summary.md">Project summary</a></li>
+<li><a href="1.5%20Relevant%20research.md">Relevant research</a></li>
+<li><a href="1.6%20Methods%20and%20sources.md">Methods and
+sources</a></li>
+<li><a href="1.7%20Objectives.md">Objectives</a></li>
+<li><a href="1.8%20Proposed%20solution.md">Proposed solution</a></li>
+<li><a href="1.9%20Modelling.md">Modelling</a></li>
+</ol>
