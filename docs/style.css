@@ -1,0 +1,36 @@
+:root {
+    --accent: #aaefba;
+    --accent-dark: #338e48;
+}
+
+body {
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    padding: 5% 7.5% 5% 7.5%;
+    font-size: 15px;
+}
+
+nav, nav a {
+    color: var(--accent-dark);
+    text-decoration: none;
+}
+
+a {
+    color: var(--accent-dark);
+    text-decoration: 2px var(--accent-dark) underline;
+}
+
+h1 {
+    background-color: var(--accent);
+    padding: 1rem;
+    font-size: 2rem;
+}
+
+h2 {
+    background-color: var(--accent);
+    padding: 0.5rem;
+    font-size: 1.5rem;
+}
+
+h3 {
+    font-size: 1.2rem;
+}
