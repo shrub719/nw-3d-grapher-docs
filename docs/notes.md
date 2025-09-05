@@ -83,4 +83,8 @@
 - move/link to assets (images don't display)
 - automate contents of each section
     - make them their own standalone files?? does it generate one big contents then still?
-    
+
+- ```
+  pandoc */*.md --css style.css --toc --toc-depth=2  -s -o result.html   
+  ```
+    - ignores .MD files
