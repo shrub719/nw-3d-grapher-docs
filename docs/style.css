@@ -29,12 +29,26 @@ h2 {
     background-color: var(--accent);
     padding: 0.5rem;
     font-size: 1.5rem;
+    margin-top: 2rem;
 }
 
 h3 {
     font-size: 1.2rem;
+    margin-top: 1.5rem;
 }
 
 .math.inline {
     font-family: Times, serif;
+}
+
+img {
+    margin: auto;
+    display: block;
+    text-align: center;
+    width: 60%;
+}
+
+figcaption {
+    text-align: center;
+    margin-top: 2px;
 }
