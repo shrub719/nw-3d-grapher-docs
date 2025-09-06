@@ -21,10 +21,11 @@ jobs:
           args: |
             */*.md
             -s 
-            --toc --toc-depth=2
+            --toc --toc-depth 2
             --css style.css
             --embed-resources
             -o result.html
+
       - name: Upload HTML
         uses: actions/upload-artifact@v4
         with:
