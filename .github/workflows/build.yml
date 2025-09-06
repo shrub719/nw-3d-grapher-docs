@@ -9,6 +9,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Get file list
+        id: files_list
+        run: |
+          echo "files=$(printf '"%s" ' */*.md)" > $GITHUB_OUTPUT
+
       - name: Flatten assets
         run: |
           cd docs
@@ -19,7 +24,7 @@ jobs:
         uses: docker://pandoc/core:3.5
         with:
           args: |
-            */*.md
+            ${{ steps.files_list.outputs.files }}
             -s 
             --toc 
             --toc-depth 2
