@@ -16,9 +16,8 @@ jobs:
 
       - name: Flatten assets
         run: |
-          cd docs
           mkdir -p assets
-          cp */assets/* assets/
+          cp docs/*/assets/* assets/
     
       - name: Convert to HTML
         uses: docker://pandoc/core:3.5
