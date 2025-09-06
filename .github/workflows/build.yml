@@ -21,7 +21,8 @@ jobs:
           args: |
             */*.md
             -s 
-            --toc --toc-depth 2
+            --toc 
+            --toc-depth 2
             --css style.css
             --embed-resources
             -o result.html
