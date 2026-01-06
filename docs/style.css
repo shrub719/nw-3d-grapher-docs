@@ -1,11 +1,11 @@
 :root {
-    --accent: #aaefba;
-    --accent-dark: #338e48;
+    --accent: MediumSeaGreen;
+    --accent-dark: MediumSeaGreen;
 }
 
 body {
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-    padding: 0 5% 0 5%;
+    padding: 0;
     font-size: 14px;
 }
 
@@ -19,14 +19,17 @@ a {
     text-decoration: 2px var(--accent-dark) underline;
 }
 
-h1 {
+h1, h2 {
     background-color: var(--accent);
+    color: white;
+}
+
+h1 {
     padding: 1rem;
     font-size: 2rem;
 }
 
 h2 {
-    background-color: var(--accent);
     padding: 0.5rem;
     font-size: 1.5rem;
     margin-top: 2rem;

@@ -88,3 +88,4 @@
   pandoc */*.md --css style.css --toc --toc-depth=2  -s -o result.html   
   ```
     - ignores .MD files
+- add rule in justfile to paste current contents of nw-3d-grapher into a <pre>
