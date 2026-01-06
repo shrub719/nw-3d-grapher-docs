@@ -1,0 +1,73 @@
+## 1.2 Current solutions
+
+The capability of graphing in 3 dimensions is very desired of a graphing calculator, and as such many attempts have been made to provide the NumWorks calculators with this functionality. However, due to the limited capabilities of embedded hardware and the complexity of implicit graphs, these existing solutions fail to meet all the requirements of my end user.
+
+### mty's draw_3d_graph ([Link](https://my.numworks.com/python/mty/draw_3d_graph))
+
+![Screenshot of draw_3d_graph](assets/draw_3d_graph.png)
+
+draw_3d_graph is a Python script written for NumWorks' MicroPython implementation. It takes an explicit function $z = f(x, y)$ written at the end of the script and graphs it with a wireframe representation. The wireframe rasterisation of the graph paints almost instantly despite using Python Kandinsky, so the viewing experience is smooth with minimal input delay.
+
+The program allows tracing and translation of the graph domain by switching between two modes, using intuitive D-pad controls. These controls only function in the x and y dimension, so the z-coordinate is fixed and may sometimes result in points not appearing in the domain. The graph's orientation is statically isometric. The interface makes it clear where the domain lies, what mode the program as in, and which directions represent each axis.
+
+Overall, the Python script presents a functional, yet limited 3D grapher, constrained in graph manipulations and the range of graphs which it can plot. The program is nevertheless easy to use, aside from the need to edit the script to change the function.
+
+### vnap0v's surf3d ([Link](https://my.numworks.com/python/vnap0v/surf3d))
+
+![Screenshot of surf3d](assets/surf3d.png)
+
+surf3d is a Python script written for NumWork's MicroPython implementation. It is very similar to [draw_3d_graph](#mtys-draw_3d_graph-link), with two noticeable differences: the graph is of a significantly higher resolution, with proximity shading; and the graph image is completely static.
+
+The program lacks any way of interacting with or manipulating the graph, yet it still shows a prime example of how to present the graph visually to the user. The use of shading makes it clearer where points lie relative to the camera, reducing visual clutter. Some elements of this program's visual design will be useful to incorporate into my program.
+
+### Adi-df's Complex Numworks ([Link](https://github.com/Adi-df/complex-numworks))
+
+> The compiled .nwa in the [latest release](https://github.com/Adi-df/complex-numworks/releases/tag/0.2.0) doesn't load to the calculator and has a size of NaN KB.
+
+<!-- TODO: build it yourself -->
+
+Complex Numworks is a compiled Rust application for the NumWorks calculators distributed as an .nwa file. Unfortunately, it does not function - the review will have to wait until I can fix and build it myself.
+
+### yannis300307's NumcraftRust ([Link](https://github.com/yannis300307/NumcraftRust))
+
+![Screenshot of NumcraftRust from GitHub](https://private-user-images.githubusercontent.com/52321382/484338832-e704a3fb-6b2d-4f88-a660-9e3f469bf65d.png?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3NTY4NTA4MjIsIm5iZiI6MTc1Njg1MDUyMiwicGF0aCI6Ii81MjMyMTM4Mi80ODQzMzg4MzItZTcwNGEzZmItNmIyZC00Zjg4LWE2NjAtOWUzZjQ2OWJmNjVkLnBuZz9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNTA5MDIlMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjUwOTAyVDIyMDIwMlomWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPWRiOGM1MDViNDg0NDhmYTE5M2Y5MDY1ZWRkNTQ0OWVlODYyZDdhNWY1Mjg3ZTM0MzIyOTFhYTU4ZTQzY2M4MzQmWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0In0.y3bx2MHLramx3ibsIrxnx65rv703JD3HBR5TUgueIjU)
+
+NumcraftRust is a compiled Rust application for the NumWorks calculators distributed as an .nwa file. It is not a 3D graphing program at all, but it accomplishes the same task of a 3D rendering engine operating within the limited hardware of the NumWorks calculators. The application is an implementation of a basic cube sandbox game with movement, building and breaking mechanics.
+
+The game runs at an average of 20 FPS on the N0100 and N0110, and at 50 FPS on the N120. This remains relatively stable even with thousands of polygons on the screen. Screen tearing is minimal and frames are drawn smoothly with no flickering. Various optimisations mean the application runs responsively enough for a positive user experience.
+
+While its accomplishments are similar to what a 3D grapher should do, it obviously has no 3D graphing functionality. The purpose of the program is very different yet it still provides a solution to one of the problems faced by this project.
+
+### KhiCAS/XCAS ([Link](https://www-fourier.univ-grenoble-alpes.fr/~parisse/numworks/nws_en.html))
+
+![Screenshot of KhiCAS](assets/khicas.png)
+
+KhiCAS is a small, yet powerful Computer Algebra System that was ported to the NumWorks calculators<!-- by whom? --> as an app with a custom installation protocol. It implements its own mathematical statement parsing system through a command line interface, and its own pseud-language for math input. 
+
+The interface is bare and difficult to learn, which should be avoided. However, the result is that KhiCAS is a very able algebra system able to understand most mathematical concepts as input, including trigonometric functions and abstract algebra. A balance between learning curve and capability should be considered in my own program so that most graphs can be represented without compromising accessibilty to students.
+
+### FX-CG50 3D Graph ([Link](https://education.casio.co.uk/support/os-files/os-files-cg50-add-ins/))
+
+![Screenshot of 3D Graph](assets/casio.png)
+
+![Screenshot of 3D Graph's trace function](assets/casio-trace.png)
+
+![Screenshot of 3D Graph's view window](assets/casio-vwin.png)
+
+![Screenshot of 3D Graph's G-Solve function](assets/casio-solve.png)
+
+The Casio fx-CG50 calculator has an official application for 3D graphing. Although the application comes installed with the calculator, it is not part of the suite of built-in apps and needs to be reinstalled manually as an add-in from a computer if the calculator is reset or crashes.
+
+The application can only graph certain types of 3D graphs, limited to primitives such as spheres, cones, planes and cylinders. However, it allows the user to trace each function drawn, as well as rotating and scaling the viewport. Translating the graph is unintuitive, done numerically via the View Window. Graphs and points are saved between sessions so that the same graph only needs to be calculated once.
+
+The fx-CG50 3D Graph app exemplifies what the user experience should look like when displaying the graph, although a few of the graph manipulation methods are not very user-friendly. Despite this, it is limited in capability with regards to explicit and implicit functions despite the fx-CG50's 2D grapher having support for those. The program only functions on the fx-CG50 and is not compatible with any other calculators.
+
+### Desmos 3D ([Link](https://www.desmos.com/3d))
+
+![Screenshot of Desmos 3D](assets/desmos.png)
+
+Desmos, a website that host free maths tools, has a beta test of a 3D graphing program to go alongside their 2D grapher. Built on the same system as the 2D grapher, it is smooth and feature-complete, and runs on most browsers using JavaScript.
+
+The user experience is natural, with a comprehensive feature set including variable sliders and animation, possible due to the capability of computer hardware. The program also offers several QOL features like custom colouring, domains, and labels for different functions. Graph manipulation takes keyboard & mouse input for ease of use.
+
+The program is capable of plotting implicit graphs, although it can trip up on complex surfaces involving tangents and undefined points. This may be a vulnerability of the [marching cubes](#algorithms) algorithm.
