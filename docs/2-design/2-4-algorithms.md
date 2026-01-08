@@ -70,3 +70,58 @@ triangles = get_triangles(mesh_vertices)
 # add them to the mesh to be rendered
 mesh.append(triangles)
 ```
+
+### Raymarcher
+
+Sometimes a higher resolution render of an implicit graph is needed than what marching cubes
+permits us, given memory constraints.
+Raymarching allows us to produce a single, high-quality frame of a graph from a specific
+viewpoint by calculating the appropriate colour of each pixel on the screen.  
+This is a sufficient level of detail for a great proportion of graphs even with the
+NumWorks calculators' screen resolutions of 320x240.
+
+The raymarcher makes use of a special 4 dimensional affine transformation matrix; specifically,
+the inverse of the matrix used by the camera to generate pixels from domain coordinates. This lets
+us "march" virtually through the imaginary z-axis of each pixel and use the inverse matrix to
+calculate the corresponding coordinates at that point. 
+The algorithm then tests that point to find, similar to marching cubes, the value at which
+the test function passes from positive to negative or vice-versa.  
+The current depth is then used to colour the pixel, if a solution is found.
+
+### Grid generator
+
+Explicit graphs given as $z = f(x, y)$ are significantly easier to generate graphs for.
+The following pseuedcode systematically generates tris for an explicit graph in a given
+domain.
+
+```py
+dx = (x_range / n_divisions)
+dy = (y_range / n_divisions)
+dz = (z_range / n_divisions)
+
+for x_iter in range(n_divisions):
+    for y_iter in range(n_divions):
+        x0 = x_start + dx * x_iter
+        y0 = y_start + dy * y_iter
+
+        vertices = []
+
+        # cycle through vertices in a specific order
+        for i in range(2):
+            for j in range(2):
+                x = x0 + dx * i
+                y = y0 + dx * j
+                z = f(x, y)
+
+                # indexes specially to ensure proper order of vertices
+                vertices[i*2 + j] = (x, y, z)
+
+        # indexes are again chosen so that the triangles properly cover the graph
+        mesh.append(triangle(
+            vertices[1], vertices[2], vertices[0]
+        ))
+        mesh.append(triangle(
+            vertices[1], vertices[2], vertices[3]
+        ))
+```
+
