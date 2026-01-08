@@ -1,10 +1,11 @@
 :root {
     --accent: MediumSeaGreen;
     --accent-dark: MediumSeaGreen;
+    --bg-light: #eee;
 }
 
 body {
-    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-family: "Ubuntu", "Lucida Grande";
     padding: 0;
     font-size: 14px;
 }
@@ -54,4 +55,9 @@ img {
 figcaption {
     text-align: center;
     margin-top: 2px;
+}
+
+pre {
+    background-color: var(--bg-light);
+    padding: 14px; 
 }

@@ -1,0 +1,72 @@
+## 2.4 Algorithms
+
+### Marching cubes
+
+Marching cubes is an algorithm used for numerically creating triangular meshes from implicit equations
+in order to produce graphs.
+Variations of this algorithm are used in graphing applications like Mathematica and Desmos 2D/3D.
+
+Improvements upon this algorithm, which use real analysis to dynamically adjust cube density
+based on local function complexity, are available, but were out of scope of my solution.
+
+**Cube splitter**
+```py
+dx = (x_range / n_divisions)
+dy = (y_range / n_divisions)
+dz = (z_range / n_divisions)
+
+for x_iter in range(n_divisions):
+    for y_iter in range(n_divisions):
+        for z_iter in range(n_divisions):
+            # left-top-front vertex coordinates
+            x0 = x_start + dx * x_iter
+            y0 = y_start + dy * y_iter
+            z0 = z_start + dz * z_iter
+            
+            # right-bottom-back vertex coordinates
+            x1 = x0 + dx
+            y1 = y0 + dx
+            z1 = z0 + dx
+
+            # can now list all vertices of the cube (...)
+            # pass them in to a cube testing function
+            test_cube(...)
+```
+
+The main cube splitter function passes in an ordered set of vertices of the cube,`vertices`.
+The cube tester function also has access to a function `test`,
+which tests the implicit equation to be graphed with the values of the vertex.  
+If the result is 0, the point lies on the graph.
+
+This is the primary operating principle for marching cubes; it attempts to find pairs of
+vertices where the test function passes from positive to negative, and linearly interpolates
+between their edges to estimate solutions.  
+From these estimated points, there is always a triangular mesh that can be produced within the
+cube that approximates the shape of the graph.
+
+In this pseudocode, the methods by which these "solution edges" are determined and how a triangle
+mesh is produced from them are ommitted, and
+discussed later in the technical solution. <!-- TODO: link -->
+
+**Cube tester** (function `test_cube`)
+```py
+test_values = []
+for vertex in vertices:
+    test_values.append(test(vertex))
+
+solution_edges = find_edges(test_values)
+mesh_vertices = []
+for edge in solution_edges:
+    # edge contains indices of vertices; extract them here
+    p0 = edge[0]
+    p1 = edge[1]
+    
+    mesh_vertices.append(interpolate(
+        vertices[p0], vertices[p1],
+        test_values[p0], test_values[p1]
+    ))
+
+triangles = get_triangles(mesh_vertices)
+# add them to the mesh to be rendered
+mesh.append(triangles)
+```

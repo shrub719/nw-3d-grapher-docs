@@ -15,3 +15,8 @@ The N0120 calculator has the following technical specifications listed on the [N
 | Screen Resolution | 320x240 pixels, 140 PPI |
 | Screen Colours | 262 144 |
 
+Of particular interest is the system's very limited RAM -
+which is why I need to be careful divying large data structures between the heap and the stack,
+and focus on space efficiency in code.  
+The processor is also single-cored and relatively slow, which required me to modify my approaches to some problems.
+
