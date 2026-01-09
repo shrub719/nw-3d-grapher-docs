@@ -18,8 +18,6 @@ The program is capable of plotting implicit graphs, although it can trip up on c
 
 ### FX-CG50 3D Graph
 
-![Screenshot of 3D Graph](assets/casio.png)
-
 ![Screenshot of 3D Graph's trace function](assets/casio-trace.png)
 
 ![Screenshot of 3D Graph's view window](assets/casio-vwin.png)
