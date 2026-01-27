@@ -4,28 +4,56 @@
 
 ### Platform
 
-There are various ways to write software for the NumWorks calculator, with varying degrees of control and compatibility. NumWorks provides several [sample applications](https://github.com/search?q=org%3Anumworks+epsilon-sample-app&type=repositories) on their GitHub which I used to research the different methods available.
+There are various ways to write software for the NumWorks calculator, with varying 
+degrees of control and compatibility. NumWorks provides several [sample applications](https://github.com/search?q=org%3Anumworks+epsilon-sample-app&type=repositories) 
+on their GitHub which I used to research the different methods available.
 
 NumWorks offers Epsilon App Development Kits for [C](https://github.com/numworks/epsilon/blob/9072ab80a16d4c15222699f73896282a65eecd54/eadk/include/eadk/eadk.h##),
 [C++](https://github.com/numworks/epsilon-sample-app-cpp/blob/master/src/eadkpp.h) and 
-[Rust](https://github.com/numworks/epsilon-sample-app-rust/blob/master/src/eadk.rs) which expose common I/O endpoints and type utilities. The EADK provides no reason to choose any language over another.
+[Rust](https://github.com/numworks/epsilon-sample-app-rust/blob/master/src/eadk.rs) which 
+expose common I/O endpoints and type utilities. The EADK provides no reason to choose 
+any language over another.
 
-However, each language has its advantages: C is the most lightweight, and typically the easiest to write clean, efficient code for. C++'s object oriented additions as a superset of C gives greater structure while adding complexity. Rust is a more modern language similar in level to C++, while capable of producing faster programs. <!-- maybe work on these descriptions.. -->  
-Due to my personal experience with C/C++ and the complexity of the project, C++ will be the language of choice for the 3D Grapher.
+However, each language has its advantages: C is the most lightweight, and typically
+the easiest to write clean, efficient code for. C++'s object oriented additions as
+a superset of C gives greater structure while adding complexity. Rust is a more modern
+language similar in level to C++, while capable of producing faster programs. <!-- maybe work on these descriptions.. -->  
+Due to my personal experience with C/C++ and the complexity of the project, C++ will
+be the language of choice for the 3D Grapher.
 
-In addition, NumWorks details how you can develop your own [userland version of Epsilon](https://www.numworks.com/engineering/software/build/) written in C++. Other developers have used this to create custom apps that function just like built-in Epsilon ones, which gives greater control over the API without the need of the EADK as a middleman. It also gives access to tools in the Epsilon architecture - most importantly [Poincaré](https://www.numworks.com/engineering/software/poincare/), the native mathematical expression parser, which I would use in my code.
+In addition, NumWorks details how you can develop your own [userland version of Epsilon](https://www.numworks.com/engineering/software/build/) 
+written in C++. Other developers have used this to create custom apps that function 
+just like built-in Epsilon ones, which gives greater control over the API without
+the need of the EADK as a middleman. It also gives access to tools in the Epsilon
+architecture - most importantly [Poincaré](https://www.numworks.com/engineering/software/poincare/), 
+the native mathematical expression parser, which I would use in my code.
 
 ![Epsilon's architecture](https://www.numworks.com/engineering/software/architecture-58716913.svg)
 
-This comes with a few drawbacks, most notably a complicated development cycle. Epsilon versions 16+ make it very difficult to load userland and have locked down much of the calculators developmental capabilties. This makes the testing and debugging process rather difficult without the convenience that comes from loading `.nwa` files.  
-Applications also become more difficult to distribute as they become part of a custom version of Epsilon, although the community has developed some standards<!-- that one issue on a newbie's epsilon app?? check reddit -->. NumWorks' licenses also make this distribution legally grey (see [Issue ##38](https://github.com/numworks/epsilon/issues/38)).
+This comes with a few drawbacks, most notably a complicated development cycle. 
+Epsilon versions 16+ make it very difficult to load userland and have locked 
+down much of the calculators developmental capabilties. This makes the testing
+and debugging process rather difficult without the convenience that comes from 
+loading `.nwa` files.  
+Applications also become more difficult to distribute as they become part of a
+custom version of Epsilon, although the community has developed some standards<!-- that one issue on a newbie's epsilon app?? check reddit -->.
+NumWorks' licenses also make this distribution legally grey (see [Issue ##38](https://github.com/numworks/epsilon/issues/38)).
 
 ### Libraries
 
-Aside from the development kit, a few libraries make for convenient shorcuts for performing memory-related tasks.
+Aside from the development kit, a few libraries make for convenient shorcuts 
+for performing memory-related tasks.
 
-[Yaya-Cout's](https://github.com/Yaya-Cout)'s library [NumWorks Extapp Storage](https://framagit.org/Yaya.Cout/numworks-extapp-storage) uses some memory hacks to allow external apps to save records in the NumWorks' memory. Documentation is available [here](https://yaya-cout.github.io/Nwagyu/reference/apps/storage.html). `storage.c` and `storage.h` can easily be added, `##include`d and compiled with the app. This library is essential for persistent storage between sessions of the app, such as saving calculated graphs or settings.
+[Yaya-Cout's](https://github.com/Yaya-Cout)'s library [NumWorks Extapp Storage](https://framagit.org/Yaya.Cout/numworks-extapp-storage) 
+uses some memory hacks to allow external apps to save records in the NumWorks' memory. 
+Documentation is available [here](https://yaya-cout.github.io/Nwagyu/reference/apps/storage.html). 
+`storage.c` and `storage.h` can easily be added, `##include`d and compiled with the app. 
+This library is essential for persistent storage between sessions of the app, such as
+saving calculated graphs or settings.
 
-[zlib](https://zlib.net/) and [libpng](https://www.libpng.org/pub/png/libpng.html) are other lightweight libraries for image manipulation suited for the NumWorks, as evidenced by Nwagyu's [PNG Viewer](https://github.com/nwagyu/pngviewer?tab=readme-ov-file##dependencies). These libraries would be used to save screenshots of displayed graphs.
+[zlib](https://zlib.net/) and [libpng](https://www.libpng.org/pub/png/libpng.html) are other 
+lightweight libraries for image manipulation suited for the NumWorks, as evidenced by Nwagyu's
+[PNG Viewer](https://github.com/nwagyu/pngviewer?tab=readme-ov-file##dependencies).
+These libraries would be used to save screenshots of displayed graphs.
 
 <!-- mathematical parser JIC -->

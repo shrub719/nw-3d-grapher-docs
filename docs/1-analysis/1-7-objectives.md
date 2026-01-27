@@ -21,11 +21,15 @@
     1. Handle D-pad input for graph manipulation
     1. Display relevant information using a UI bar
 1. **Graph generation**
-    1. $z = f(x, y)$ (explicit functions) — Systematically generate a grid of points by evaluating a parsed function
-    1. $x, y, z = f(t)$ (parametric functions) — Systematically generate all points in the domain of a parsed parametric function
-    1. $f(x, y, z) = 0$ (implicit functions) — Generate a triangular mesh from a parsed implicit function using a marching cubes algorithm
+    1. $z = f(x, y)$ (explicit functions) — Systematically generate a grid of 
+    points by evaluating a parsed function
+    1. $x, y, z = f(t)$ (parametric functions) — Systematically generate all
+    points in the domain of a parsed parametric function
+    1. $f(x, y, z) = 0$ (implicit functions) — Generate a triangular mesh from 
+    a parsed implicit function using a marching cubes algorithm
 1. **Graph manipulation**
-    1. Implement different manipulation modes, with separate controls for each axis (**3. Interface & controls**)
+    1. Implement different manipulation modes, with separate controls for 
+    each axis (**3. Interface & controls**)
         1. TRANSLATE - adjustment of domain start/end
         1. ROTATE - rotation of 3D domain relative to the camera
         1. SCALE - adjustment of domain size (and resolution)
