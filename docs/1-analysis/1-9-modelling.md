@@ -5,7 +5,15 @@ the top-level data flow can be viewed as a simple menu/interaction system. The p
 is modelled as closely as possible to the principles used in NumWorks' own native apps,
 in accordance with the projects goal to produce a near-seamless educational experience.
 
-![Abstracted data flow diagram](assets/mermaid-data-flow.png)
+```{.mermaid format=svg}
+flowchart LR
+    z[Epsilon home] --Open app--> a
+    a --HOME button--> z
+    a[Input menu] --Enter function--> b[Graph display - VIEW]
+    b <--Switch mode--> c[Graph display - DOMAIN]
+    b --Exit display--> a
+    c --Exit display--> a
+```
 
 Possibly important to note is that the growth of the size of octrees (considered in 
 3 dimensional grid-related programs which may be of use to my program) is modelled as
