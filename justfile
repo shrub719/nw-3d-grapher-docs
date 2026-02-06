@@ -8,3 +8,6 @@ convert:
 
 [default]
 build: flatten convert
+
+commit:
+    git commit -am "upd8"
