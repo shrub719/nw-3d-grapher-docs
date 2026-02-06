@@ -1,6 +1,7 @@
 ## 1.2 Current solutions
 
-The capability of graphing in 3 dimensions is very desired of a graphing calculator,
+The capability of graphing in 3 dimensions is very desired of a graphing calculator
+by educators and students of calculus,
 and as such many attempts have been made to provide the NumWorks calculators with
 this functionality. However, due to the limited capabilities of embedded hardware
 and the complexity of implicit graphs, these existing solutions fail to meet all
@@ -49,8 +50,11 @@ saved between sessions so that the same graph only needs to be calculated once.
 The fx-CG50 3D Graph app exemplifies what the user experience should look like when
 displaying the graph, although a few of the graph manipulation methods are not very 
 user-friendly. Despite this, it is limited in capability with regards to explicit and 
-implicit functions despite the fx-CG50's 2D grapher having support for those. The 
-program only functions on the fx-CG50 and is not compatible with any other calculators.
+implicit functions despite the fx-CG50's 2D grapher having support for those. Functions
+cannot be inputed by the user, and must instead be selected from a list of presets with parameters,
+restricted to shapes like spheres/spheroids, cones and toruses.
+
+The program only functions on the fx-CG50 and is not compatible with any other calculators.
 
 [Link](https://education.casio.co.uk/support/os-files/os-files-cg50-add-ins/)
 
@@ -88,6 +92,10 @@ represent each axis.
 Overall, the Python script presents a functional, yet limited 3D grapher, constrained 
 in graph manipulations and the range of graphs which it can plot. The program is nevertheless
 easy to use, aside from the need to edit the script to change the function.
+
+Despite this, the speed of graphing in the program, and the fact that it only supports explicit
+graphs at a low resolution in a fixed domain, means it is completely useless for arbitrary
+functions that show up in advanced mathematics classes.
 
 [Link](https://my.numworks.com/python/mty/draw_3d_graph)
 

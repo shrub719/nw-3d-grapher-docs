@@ -4,6 +4,20 @@
     --bg-light: #eee;
 }
 
+@media print {
+    h1 {
+        page-break-before: always;
+    }
+    
+    h1.title {
+        page-break-before: auto !important;
+    }
+
+    figure, img {
+        page-break-inside: avoid !important;
+    }
+}
+
 body {
     font-family: "Ubuntu", "Lucida Grande";
     padding: 0;
@@ -49,7 +63,7 @@ img {
     margin: auto;
     display: block;
     text-align: center;
-    width: 60%;
+    width: 100%;
 }
 
 figcaption {

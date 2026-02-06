@@ -28,7 +28,7 @@ the need of the EADK as a middleman. It also gives access to tools in the Epsilo
 architecture - most importantly [Poincaré](https://www.numworks.com/engineering/software/poincare/), 
 the native mathematical expression parser, which I would use in my code.
 
-![Epsilon's architecture](https://www.numworks.com/engineering/software/architecture-58716913.svg)
+![Epsilon's architecture](https://raw.githubusercontent.com/numworks/epsilon/refs/heads/master/docs/architecture.svg)
 
 This comes with a few drawbacks, most notably a complicated development cycle. 
 Epsilon versions 16+ make it very difficult to load userland and have locked 

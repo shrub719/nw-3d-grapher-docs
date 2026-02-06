@@ -2,8 +2,13 @@
 
 Graph manipulation is an important part of the application - it's the way 
 the user explores graphs they have created, which is crucial to the classroom
-workflow when learning using the 3D Grapher. This prototype demonstrates graph
-manipulation on several simple 3D objects plotted as a set of points.
+workflow when learning using the 3D Grapher. 
+
+This prototype demonstrates graph
+manipulation on several simple 3D objects plotted as a set of points. It should
+be able to perform matrix operations on a relatively large number of points stored
+in memory, and establish an appropriate input scheme for important graph-related operations
+like rotation and scaling.
 
 [Prototype repository](https://github.com/BMA-Computer-Science/nea-prototyping-shrub719)
 
@@ -395,3 +400,12 @@ float better_cos(float x) {
     return 1 - x2 / 2.0f + x4 / 24.0f - x6 / 720.0f + x8 / 40320.0f;
 }
 ```
+
+The prototype accomplished the specified targets, and ran with very good performance,
+proving the utility of low-level languages to optimise my final project. I was able
+to devise and test a proper input schematic which I detail in my design section.
+
+I received significant insight into the workings of NumWorks' syscall bindings to
+Ion - this prototype helped me discover visual bugs and best practises to avoid them,
+as well as the convention of working with the KeyboardState object.
+

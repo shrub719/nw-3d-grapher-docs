@@ -89,3 +89,7 @@
   ```
     - ignores .MD files
 - add rule in justfile to paste current contents of nw-3d-grapher into a <pre>
+
+```
+tail -n +1 [file]
+```

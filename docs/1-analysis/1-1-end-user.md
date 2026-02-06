@@ -1,12 +1,15 @@
 ## 1.1 End User
 
-My end users consist of individual students or teachers who want to use the
-program on their own NumWorks calculator, rather than being aimed at schools
+My end users consist of individual students or teachers who want the capability
+to graph 3D functions on their own NumWorks calculator, rather than being aimed at schools
 or as a product for larger educational bodies.
 
-Therefore, I decided to ask a sixth form teacher, both as someone with a need
-for the application and with the most knowledge on how it would be used. Here
-is the email chain with my previous secondary school maths teacher, Mr Thomas.
+Therefore, I decided to ask a sixth form teacher at my previous secondary school, Mr. Thomas,
+about his needs in a program like this project.
+This makes Thomas' opinion on the program useful as both someone with a need for a 3D graphing
+application and someone with the most knowledge on how it would be used in a classroom setting.
+
+Here is the email chain between Mr Thomas and I.
 
 ![Email between me and Mr Thomas](assets/thomas-email.png)
 
