@@ -51,7 +51,7 @@ The fx-CG50 3D Graph app exemplifies what the user experience should look like w
 displaying the graph, although a few of the graph manipulation methods are not very 
 user-friendly. Despite this, it is limited in capability with regards to explicit and 
 implicit functions despite the fx-CG50's 2D grapher having support for those. Functions
-cannot be inputed by the user, and must instead be selected from a list of presets with parameters,
+cannot be inputted by the user, and must instead be selected from a list of presets with parameters,
 restricted to shapes like spheres/spheroids, cones and toruses.
 
 The program only functions on the fx-CG50 and is not compatible with any other calculators.
@@ -61,7 +61,7 @@ The program only functions on the fx-CG50 and is not compatible with any other c
 ### NumWorks Workshop
 
 NumWorks provides an online service where users can share Python scripts under their
-NumWorks accounts, available at the domain [my.numworks.com][]. <!-- TODO: link -->
+NumWorks accounts, available at the domain [my.numworks.com](). <!-- TODO: link -->
 
 These solutions, while written for the MicroPython interpreter rather than the native
 operating system of the calculator, emulate closest what I am attempting to
