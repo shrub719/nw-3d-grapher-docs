@@ -1,5 +1,7 @@
 ## 3.2 Key code
 
+[Jump to end](#complex-programming-techniques)
+
 ```rs
 ==> constants.rs <==
 pub mod settings {

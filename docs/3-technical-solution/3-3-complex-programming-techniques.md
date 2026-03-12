@@ -1,6 +1,6 @@
 ## 3.3 Complex programming techniques
 
-### Matrices
+### Matrices and quaternions
 
 `grapher/mat.rs` contains definitions for many vector and matrix calculation-related objects.
 In Rust, these take the form of structures with implementations of methods and overloaded operators
@@ -208,6 +208,109 @@ The key part that distinguishes quaternions from other representations of rotati
 the ability to multiply two of them together to compound rotations.
 
 
-### Rendering and rasterisation
+### Mesh generation
 
-Hey.
+Mesh generation relies on the algorithms outlined in my [Design section](#algorithms-1).
+My solution relies heavily on a set of lookup tables which contain the "solution edges"
+that form the correct triangle meshes discussed in the algorithm design. 
+
+```rs
+let mut cube_index: usize = 0;
+
+if t0 < 0.0 { cube_index |= 1 << 0 };
+if t1 < 0.0 { cube_index |= 1 << 1 };
+if t2 < 0.0 { cube_index |= 1 << 2 };
+if t3 < 0.0 { cube_index |= 1 << 3 };
+if t4 < 0.0 { cube_index |= 1 << 4 };
+if t5 < 0.0 { cube_index |= 1 << 5 };
+if t6 < 0.0 { cube_index |= 1 << 6 };
+if t7 < 0.0 { cube_index |= 1 << 7 };
+
+let edge = EDGE_TABLE[cube_index];
+let triangle = TRI_TABLE[cube_index];
+```
+
+The algorithm generates a hash index from the negative vertices by using each
+bit to signal a test value less than 0; the marching cubes
+tables supplied by Paul Bourke are used to retrieve the solution edges,
+and triangles are formed by interpolating the tested values along matching vertices.
+
+Both implicit and explicit mesh generation use a similar iteration wrapper that reruns the
+test for each square in the grid or cube in the domain. The resolution depends on `EXPLICIT_N`
+and `IMPLICIT_N` constants defined in a separate module.
+
+### Rasterisation
+
+The more processing-heavy alternative to marching cubes implicit mesh generation is an
+adapted raymarching rasterisation algorithm.
+
+```rs
+for y in MARGIN_TOP..MARGIN_TOP+FRAME_HEIGHT {
+    for x in 0..SCREEN_WIDTH {
+        row_buffer[x as usize] = match march_that_ray(expr, matrix, n, x, y) {
+            Ok(c) => c,
+            Err(_) => BG
+        };
+    }
+
+    display::push_rect(
+        Rect {
+            x: 0, 
+            y,
+            width: SCREEN_WIDTH,
+            height: 1
+        },
+        &row_buffer
+    );
+    
+    let current_time = timing::millis();
+    if (current_time - prev_time) > MAX_ROW_TIME {
+        n = (n as f32 * 0.9) as usize;
+    }
+    prev_time = current_time;
+
+```
+
+The algorithm works on a similar mathematical principle to testing vertices in marching cubes,
+testing for point where a test value crosses from negative to positive. It iterates through every
+pixel $(x, y)$. The loop also attempts to dynamically adjust its own sample size; `n` begins at
+the defined `IMPLICIT_N` but slowly adjusts itself if rasterisation is taking too long.
+
+```rs
+fn march_that_ray(expr: &Expr, matrix: Matrix4, n: usize, x: u16, y: u16) -> Result<Color, EvalError> {
+    let z0 = -1.0;
+    let z1 = 1.0;
+    let dz = (z1 - z0) / n as f32;
+    let mut z = z0;
+    
+    let mut c = get_coord(matrix, x, y, z);
+    let mut prev_t = expr.eval(c.x, c.y, c.z)?;
+    let mut i = 0;
+    while i < n {
+        z += dz;
+        c = get_coord(matrix, x, y, z);
+        if prev_t * expr.eval(c.x, c.y, c.z)? < 0.0 {
+            break;
+        }
+        prev_t = expr.eval(c.x, c.y, c.z)?;
+        i += 1;
+    }
+    
+    let mut value = (-z + 1.0) / 2.0 * 255.0;
+    if value > 255.0 { value = 255.0 };
+    if value < 0.0 { value = 0.0 };
+
+    Ok(
+        if i == n { BG } else { Color::from_rgb(0, value as u16, 255) }
+    )
+}
+```
+
+The inner raymarching function uses the inverse projection matrix `matrix` to step through
+domain space relative to the angle of the camera. Pixels are coloured depending on progress
+through the camera-z-coordinate; pixels that intersected further from the camera are darker.
+
+### Rendering
+
+<!--todo-->
+
