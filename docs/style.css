@@ -16,6 +16,11 @@
     figure, img {
         page-break-inside: avoid !important;
     }
+
+    pre > code.sourceCode > span {
+        padding-left: 0 !important;
+        text-indent: 0 !important;
+    }
 }
 
 body {
