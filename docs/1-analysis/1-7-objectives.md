@@ -53,9 +53,17 @@
     1. Interpret manipulations as a single (inverse) transformation matrix
         a. Aggregate transformations into a single matrix
 1. **Graph display**
+    1. Frame buffers
+        a. Handle screen through 4 iterative frame buffers
+        a. Implement `f16` depth buffers
+        a. Rasterise triangles, lines and polygons to the buffers
     1. Grid (explicit) graph formats
         a. Display explicit function
     1. Mesh (implicit) graph formats
         a. Display implicit mesh
     1. Implicit graph rasterisation with raytracer
         a. Display raytraced implicit graph screen
+    1. Handle the effect of input on graph display
+        a. Redraw display on input
+        a. Draw help menu over graph display
+

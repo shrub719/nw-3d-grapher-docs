@@ -36,8 +36,8 @@ for x_iter in range(n_divisions):
             
             # right-bottom-back vertex coordinates (opposite corner)
             x1 = x0 + dx
-            y1 = y0 + dx
-            z1 = z0 + dx
+            y1 = y0 + dy
+            z1 = z0 + dz
 
             # can now list all vertices of the cube (...)
             # pass them in to a cube testing function
