@@ -80,3 +80,11 @@ pre {
     background-color: var(--bg-light);
     padding: 14px; 
 }
+
+td {
+    padding: 5px;
+}
+
+tr:nth-child(even) {
+    background-color: var(--bg-light);
+}

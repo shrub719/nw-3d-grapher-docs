@@ -15,7 +15,7 @@ the graph display.
 Taking inspiration from current solutions, in order to keep input as intuitive as
 possible with the limited controls of the calculator keyboard, I've split different
 interactions across several input modes. Each mode has its own keybinds and help
-menu<!--TODO: help menu--> and displays relevant information to the interactino.
+menu<!--TODO: help menu--> and displays information relevant to the interaction.
 
 I've considered how to divide various input tasks in a way that doesn't overwhelm
 the user, and I want to make sure it's as easy as possible to switch between modes.
@@ -34,4 +34,16 @@ size, proprtions and scale of the graph is communicated effectively. I found tha
 making the three axis visible on the graph display with colour coding not only
 made it clearer how the graph was rotated/scaled, but also made it more obvious
 which axis was which.
+
+I consulted my end user on these designs, and used his feedback to iterate on
+the main grapher menu. As this is where the bulk of graph manipulation occurs,
+I felt it was important to keep in touch with the needs of my clients.
+
+![Email exchange with Mr Thomas about the UI sketches](./assets/ui-thomas.png)
+
+This led me to adjust my design in several areas. The final product contains a help
+menu, and no obstructing bounding box - both features mentioned in Mr Thomas's feedback.
+The HUD was also adjusted as he described.
+
+<!--improved, overall image-->
 

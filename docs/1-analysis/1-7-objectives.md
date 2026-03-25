@@ -11,7 +11,6 @@
             a. Input and display numbers and letters
         1. Handle all special keys on the calculator as shortcuts for specific functions
             a. Shift modifiers ($\sin$, $\cos$)
-            a. Relevant alpha modifiers (brackets, $\arcsin$)
             a. Ignore irrelevant alpha modifiers ($=$, $\gt$)
     1. Graph configuration
         1. Toggle graph type (see **4. Graph generation**) ($z =$ and $0 =$)
@@ -19,18 +18,18 @@
 1. **Poincaré/Pompeiu**
     1. Convert parsed mathematical text input into a tree of evaluatable functions
         a. Fold function tokens into function calls
-        a. Do not evaluate constants/variables (create leaf nodes)
+        a. Do not evaluate constants/variables
     1. Implement function evaluation/calculation
         a. Arithmetic operators
         a. Trigonometric approximations
-        a. Inverse trigonometric approximations
         a. Indices, including negative and fractional
-        a. Exponents and logarithms
+        a. Exponents
 1. **Interface & controls**
     1. Allow for switching between multiple input modes (VIEW, DOMAIN)
         a. Press super button to toggle mode
-    1. Handle D-pad input for graph manipulation
-        a. Accept directional input and handle correctly relative to viewing direction
+    1. Handle D-pad input for graph manipulation by accepting directional input and handling correctly relative to viewing direction
+        a. Rotate in VIEW
+        b. Translate in DOMAIN
     1. Display relevant information using a UI bar
         a. VIEW: scale factor
         b. DOMAIN: start and end x, y, and z coordinates of domain
@@ -53,9 +52,10 @@
     1. Interpret manipulations as a single (inverse) transformation matrix
         a. Aggregate transformations into a single matrix
 1. **Graph display**
+    1. Interface with Ion to draw to 320x240 screen
     1. Frame buffers
-        a. Handle screen through 4 iterative frame buffers
-        a. Implement `f16` depth buffers
+        a. Handle screen through multiple iterative frame buffers
+        a. Implement depth buffers
         a. Rasterise triangles, lines and polygons to the buffers
     1. Grid (explicit) graph formats
         a. Display explicit function

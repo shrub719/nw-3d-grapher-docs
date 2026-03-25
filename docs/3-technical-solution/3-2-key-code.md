@@ -20,7 +20,7 @@ pub mod palette {
     pub const BLACK: Color = Color::from_rgb(0, 0, 0);
 
     pub const RED: Color = Color::from_rgb(255, 90, 75);
-    pub const GREEN: Color = Color::from_rgb(75, 200, 90);
+    pub const GREEN: Color = Color::from_rgb(775, 200, 90);
     pub const BLUE: Color = Color::from_rgb(75, 90, 255);
 }
 
@@ -83,7 +83,6 @@ pub mod limits {
 
 pub mod strings {
     pub const ROTATE_NAME: &str = "VIEW";
-    pub const TRACE_NAME: &str = "TRACE";
     pub const DOMAIN_NAME: &str = "DOMAIN";
 
     type Help<'a> = [&'a str; 10];
@@ -96,18 +95,6 @@ pub mod strings {
         "",
         "Reset:",
         "  Bcksp",
-        "",
-        ""
-    ];
-    pub const TRACE_HELP: Help = [
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
         "",
         ""
     ];
@@ -139,7 +126,7 @@ pub mod controls {
     pub const DECREASE: Key =   Key::Minus;
     pub const MODIFIER: Key =   Key::Multiplication;
 
-    pub const CONFIRM: Key =    Key::OK;
+    // pub const CONFIRM: Key =    Key::OK;
     pub const BACK: Key =       Key::Back;
 
     pub const HELP: Key =       Key::Toolbox;
@@ -592,6 +579,29 @@ pub fn heap_size() -> usize {
     (unsafe { HEAP_END.offset_from(HEAP_START) }) as usize
 }
 
+==> expr.rs <==
+use crate::{
+    grapher::Grapher,
+    eadk::header_info
+};
+
+pub mod parser;
+pub mod ui;
+
+pub fn main_loop() {
+    loop {
+        Grapher::setup_ui();
+        header_info("input");
+
+        let graph = match ui::get_expr() {
+            Some(e) => e,
+            None => break
+        };
+        let mut grapher = Grapher::new(graph);
+        grapher.main_loop();
+    }
+}
+
 ==> generator.rs <==
 pub mod explicit;
 pub mod implicit;
@@ -610,7 +620,7 @@ use crate::{
     },
     eadk::*,
     constants::{ graphics::*, palette::* },
-    input::parser::Expr
+    expr::parser::Expr
 };
 #[cfg(target_os = "none")]
 use alloc::format;
@@ -706,7 +716,6 @@ impl Grapher {
         while !self.input.upd.quit {
             if self.input.upd.domain {
                 self.mesh.update_domain(self.input.domain_trans_direction, self.input.domain_scale_direction);
-                // temp: check for exp
                 self.mesh.tris.clear();
 
                 if self.expr.is_implicit {
@@ -743,30 +752,10 @@ impl Grapher {
             self.input.update();
             self.timer.update();
             
-            if self.timer.fps < 800.0 {   // temp fix
+            if self.timer.fps < 800.0 {
                 header_info(&format!("fps: {:.1}   ", self.timer.fps));
             }
         }
-    }
-}
-
-==> input.rs <==
-use crate::{
-    grapher::Grapher
-};
-
-pub mod parser;
-pub mod ui;
-
-pub fn main_loop() {
-    loop {
-        Grapher::setup_ui();
-        let graph = match ui::get_expr() {
-            Some(e) => e,
-            None => break
-        };
-        let mut grapher = Grapher::new(graph);
-        grapher.main_loop();
     }
 }
 
@@ -779,8 +768,8 @@ pub fn main_loop() {
 #[cfg(target_os = "none")]
 use cortex_m;
 
-#[cfg(target_os = "none")]
-use eadk::heap_size;
+// #[cfg(target_os = "none")]
+// use eadk::heap_size;
 
 #[cfg(target_os = "none")]
 use embedded_alloc::LlffHeap as Heap;
@@ -812,7 +801,10 @@ mod constants;
 mod trig;
 mod grapher;
 mod generator;
-mod input;
+mod expr;
+
+#[cfg(feature = "test")]
+mod tests;
 
 #[unsafe(no_mangle)]
 pub fn main() -> isize {
@@ -822,9 +814,135 @@ pub fn main() -> isize {
         unsafe { HEAP.init(eadk::HEAP_START as usize, heap_size) }
     }
 
-    input::main_loop();
+    #[cfg(feature = "test")]
+    {
+        tests::run_all();
+        return 0;
+    }
+
+    #[allow(unreachable_code)]
+    expr::main_loop();
 
     0
+}
+
+==> tests.rs <==
+use crate::*;
+
+fn test_tokenisation(expr: &str, expected: Vec<expr::parser::Token>) -> bool {
+    use expr::parser::*;
+
+    let expr = Expr::new(expr, true).unwrap();
+
+    expr.rpn.into_iter().collect::<Vec<_>>() == expected
+}
+
+fn test_evaluation(expr: &str, expected: f32) -> bool {
+    use expr::parser::*;
+
+    let expr = Expr::new(expr, true).unwrap();
+    let result = expr.eval(0.0, 0.0, 0.0).unwrap();
+
+    result == expected
+}
+
+fn test_evaluation_approx(expr: &str, expected: f32) -> bool {
+    use expr::parser::*;
+
+    let expr = Expr::new(expr, true).unwrap();
+    let result = expr.eval(0.0, 0.0, 0.0).unwrap();
+
+    (result * 100.0).floor() == (expected * 100.0).floor()
+}
+
+fn t11a() -> bool {
+    print!("1.1.a");
+
+    use expr::parser::Token::*;
+    test_tokenisation(
+        "3",
+        vec!(Const(3.0))
+    )
+}
+
+fn t11b() -> bool {
+    print!("1.1.b");
+
+    use expr::parser::Token::*;
+    test_tokenisation(
+        "1 1 +",
+        vec!(Const(1.0), Const(1.0), Add)
+    )
+}
+
+fn t11c() -> bool {
+    print!("1.1.c");
+
+    use expr::parser::Token::*;
+    test_tokenisation(
+        "x",
+        vec!(X)
+    )
+}
+
+fn t11d() -> bool {
+    print!("1.1.d");
+
+    use expr::parser::Token::*;
+    test_tokenisation(
+        "0 sin",
+        vec!(Const(0.0), Sin)
+    )
+}
+
+fn t22a() -> bool {
+    print!("2.2.a");
+    test_evaluation("1 1 +", 2.0)
+}
+
+fn t22b() -> bool {
+    print!("2.2.b");
+    test_evaluation_approx("3.14159 sin", 0.0)
+}
+
+fn t22di() -> bool {
+    print!("2.2.d.i");
+    test_evaluation("2 3 ^", 8.0)
+}
+
+fn t22dii() -> bool {
+    print!("2.2.d.ii");
+    test_evaluation("2 -1 ^", 0.5)
+}
+
+fn t22diii() -> bool {
+    print!("2.2.d.iii");
+    test_evaluation_approx("2 0.5 ^", 1.41)
+}
+
+fn t22e() -> bool {
+    print!("2.2.e");
+    test_evaluation_approx("2 ln", 0.693)
+}
+
+// TODO: all the other functions...
+
+const TESTS: &[fn() -> bool] = &[
+    t11a, t11b, t11c, t11d,
+    t22a, t22b,
+    t22di, t22dii, t22diii, t22e
+];
+
+pub fn run_all() {
+    println!("running tests\n");
+
+    for test in TESTS {
+        let passed = test();
+        let result = if passed { "passed" } else { "failed" };
+        println!(": {}", result);
+    }
+
+    println!("\ntesting complete");
 }
 
 ==> trig.rs <==
@@ -861,6 +979,265 @@ pub fn cos(mut x: f32) -> f32 {
     1.0 - x2 / 2.0 + x4 / 24.0 - x6 / 720.0 + x8 / 40320.0
 }
 
+==> expr/parser.rs <==
+use heapless::Vec;
+use crate::{
+    constants::limits::*,
+    trig::*
+};
+
+#[derive(Debug)]
+pub enum ParserError {
+    InvalidCharacter,
+    Overflow
+}
+impl ParserError {
+    pub fn as_str(&self) -> &str {
+        match self {
+            ParserError::InvalidCharacter => "error: invalid character",
+            ParserError::Overflow => "error: expression too large"
+        }
+    }
+}
+
+#[derive(Debug)]
+pub enum EvalError {
+    Underflow,
+    Overflow,
+    ZeroDiv
+}
+
+#[derive(Debug, PartialEq)]
+pub enum Token {
+    X, Y, Z,
+    Const(f32),
+    Add, Sub,
+    Mul, Div,
+    Pow,
+    Sin, Cos, Tan
+}
+
+pub struct Expr {
+    pub is_implicit: bool,
+    pub rpn: Vec<Token, MAX_TOKENS>
+}
+impl Expr {
+    pub fn new(expr: &str, is_implicit: bool) -> Result<Self, ParserError> {
+        let mut tokens = Vec::new();
+
+        for split in expr.split_whitespace() {
+            let token = match split {
+                "x" => Token::X, "y" => Token::Y, "z" => Token::Z,
+                "+" => Token::Add, "-" => Token::Sub,
+                "*" => Token::Mul, "/" => Token::Div,
+                "^" => Token::Pow,
+                "sin" => Token::Sin, "cos" => Token::Cos, "tan" => Token::Tan,
+                _ => Token::Const(
+                    split.parse()
+                        .map_err(|_| ParserError::InvalidCharacter)?
+                )
+            };
+
+            tokens.push(token).map_err(|_| ParserError::Overflow)?
+        }
+        
+        Ok(Self { 
+            is_implicit,
+            rpn: tokens
+        })
+    }
+
+    pub fn eval(&self, x: f32, y: f32, z: f32) -> Result<f32, EvalError> {
+        let mut stack: Vec<f32, PARSE_STACK> = Vec::new();
+
+        for token in self.rpn.iter() {
+            let mut result: f32;
+
+            match *token {
+                Token::X => result = x, Token::Y => result = y, Token::Z => result = z,
+                Token::Const(n) => result = n,
+
+                Token::Add => {
+                    let b = stack.pop().ok_or(EvalError::Underflow)?;
+                    let a = stack.pop().ok_or(EvalError::Underflow)?;
+                    result = a + b;
+                },
+                Token::Sub => {
+                    let b = stack.pop().ok_or(EvalError::Underflow)?;
+                    let a = stack.pop().ok_or(EvalError::Underflow)?;
+                    result = a - b;
+                },
+                Token::Mul => {
+                    let b = stack.pop().ok_or(EvalError::Underflow)?;
+                    let a = stack.pop().ok_or(EvalError::Underflow)?;
+                    result = a * b;
+                },
+                Token::Div => {
+                    let b = stack.pop().ok_or(EvalError::Underflow)?;
+                    let a = stack.pop().ok_or(EvalError::Underflow)?;
+                    if b == 0.0 { return Err(EvalError::ZeroDiv) };
+                    result = a / b;
+                },
+
+                Token::Pow => {
+                    let b = stack.pop().ok_or(EvalError::Underflow)?;
+                    let i = b as i32;   // power only works with integers
+                    let a = stack.pop().ok_or(EvalError::Underflow)?;
+                    result = 1.0;
+                    
+                    if i > 0 {
+                        for _ in 0..i {
+                            result *= a;
+                        }
+                    } else {
+                        for _ in 0..-i {
+                            result /= a;
+                        }
+                    }
+                }
+
+                Token::Sin => {
+                    let x = stack.pop().ok_or(EvalError::Underflow)?;
+                    result = sin(x);
+                },
+                Token::Cos => {
+                    let x = stack.pop().ok_or(EvalError::Underflow)?;
+                    result = cos(x);
+                },
+                Token::Tan => {
+                    let x = stack.pop().ok_or(EvalError::Underflow)?;
+                    result = sin(x) / cos(x);
+                }
+            };
+            
+            let _ = stack.push(result)
+                .map_err(|_| EvalError::Overflow);
+        }
+
+        Ok(stack.pop().ok_or(EvalError::Underflow)?)
+    }
+}
+
+
+==> expr/ui.rs <==
+use crate::{
+    expr::parser::Expr,
+    eadk::{
+        display::*,
+        Point,
+        Color,
+        input::*,
+        timing::*
+    },
+    constants::{ 
+        controls::*,
+        palette::*
+    }
+};
+#[cfg(target_os = "none")]
+use alloc::string::String;
+#[cfg(target_os = "none")]
+use alloc::format;
+
+fn write(text: &str, is_implicit: bool) {
+    let pre = if is_implicit { "0" } else { "z" };
+    let text_c = format!("{} = {}_ ", pre, text);
+
+    let limit = 30;
+    let mut line_count = 0;
+
+    let mut line = String::new();
+    for i in 0..text_c.len() {
+        line.push(text_c.as_bytes()[i] as char);
+
+        if line.len() >= limit || i >= text_c.len() - 1 {
+            draw_string(
+                line.as_str(),
+                Point {
+                    x: 10,
+                    y: (25 + 20 * line_count) as u16
+                },
+                true,
+                Color::from_rgb(0, 0, 0),
+                Color::from_rgb(255, 255, 255)
+            );
+            line.clear();
+            line_count += 1;
+        }
+    }
+}
+
+pub fn get_expr() -> Option<Expr> {
+    let mut expr = String::new();
+    let mut is_implicit = true;
+    write(&expr, is_implicit);
+    
+    loop {
+        loop {
+            use Event::*;
+            let event = event_get(100);
+            
+            if event == Backspace {
+                expr.pop();
+                write(&expr, is_implicit);
+            } else if event == Toolbox {
+                is_implicit = !is_implicit;
+                write(&expr, is_implicit);
+            } else if event == OK {
+                break;
+            } else {
+                let c: &str = match event {
+                    LowerZ => "z ", LowerY => "y ", Xnt => "x ", LowerX => "x ",
+                    Zero => "0", One => "1", Two => "2", Three => "3", Four => "4", 
+                    Five => "5", Six => "6", Seven => "7", Eight => "8", Nine => "9",
+                    Plus => "+ ", Minus => "- ", Multiplication => "* ", Division => "/ ",
+                    Power => "^ ", Square => "2 ^ ",
+                    Sine => "sin ", Cosine => "cos ", Tangent => "tan ",
+                    EXE => " ", Space => " ",
+                    _ => ""
+                };
+
+                if c != "" {
+                    expr.push_str(c);
+                    write(&expr, is_implicit);
+                }
+            }
+
+            if KeyboardState::scan().key_down(EXIT) { return None }
+        }
+
+        match Expr::new(&expr, is_implicit) {
+            Ok(e) => return Some(e),
+            Err(e) => {
+                draw_string(
+                    e.as_str(),
+                    Point {
+                        x: 10,
+                        y: 25
+                    },
+                    true,
+                    Color::from_rgb(255, 255, 255),
+                    RED
+                );
+                KeyboardState::scan();
+                msleep(500);
+                draw_string(
+                    "                                  ",
+                    Point {
+                        x: 10,
+                        y: 25
+                    },
+                    true,
+                    Color::from_rgb(255, 255, 255),
+                    Color::from_rgb(255, 255, 255)
+                );
+                write(&expr, is_implicit);
+            }
+        };
+    }
+
+}
+
 ==> generator/explicit.rs <==
 use crate::{
     grapher::{
@@ -868,7 +1245,7 @@ use crate::{
         mat::*,
     },
     constants::limits::*,
-    input::parser::EvalError
+    expr::parser::EvalError
 };
 
 impl Grapher {
@@ -914,7 +1291,7 @@ use crate::{
     },
     generator::tables::*,
     constants::limits::*,
-    input::parser::EvalError
+    expr::parser::EvalError
 };
 
 // pub fn placeholder_func_3(x: f32, y: f32, z: f32) -> f32 {
@@ -1078,7 +1455,7 @@ use crate::{
         graphics::*,
         controls::*
     },
-    input::parser::{ Expr, EvalError }
+    expr::parser::{ Expr, EvalError }
 };
 #[cfg(target_os = "none")]
 use alloc::format;
@@ -1165,6 +1542,8 @@ pub fn generate_screen(expr: &Expr, matrix: Matrix4) {
             break;
         }
     }
+
+    while !KeyboardState::scan().key_down(BACK) { timing::msleep(100) }
 }
 
 
@@ -1519,7 +1898,6 @@ fn draw_help_string(text: &str, offset: u16) {
 pub fn draw_hud(mode: Mode, mode_update: bool, help_on: bool, scale: f32, domain: Domain) {
     let bg_color = match mode {
         Mode::View => RED,
-        Mode::Trace => GREEN,
         Mode::Domain => BLUE
     };
     
@@ -1536,7 +1914,6 @@ pub fn draw_hud(mode: Mode, mode_update: bool, help_on: bool, scale: f32, domain
 
         let text = match mode {
             Mode::View => ROTATE_NAME,
-            Mode::Trace => TRACE_NAME,
             Mode::Domain => DOMAIN_NAME
         };
         let length = text.len() as u16;
@@ -1554,11 +1931,6 @@ pub fn draw_hud(mode: Mode, mode_update: bool, help_on: bool, scale: f32, domain
             &format!("scale: {:.2}", scale),
             bg_color
         );
-    } else if mode == Mode::Trace {
-        draw_hud_string(
-            "green",
-            bg_color
-        );
     } else if mode == Mode::Domain {
         draw_hud_string_table(&format!("x: {:.1}  ", domain.x0), 0, 0, bg_color);
         draw_hud_string_table(&format!("   {:.1}  ", domain.x1), 1, 0, bg_color);
@@ -1571,7 +1943,6 @@ pub fn draw_hud(mode: Mode, mode_update: bool, help_on: bool, scale: f32, domain
     if help_on {
         let help_lines = match mode {
             Mode::View => ROTATE_HELP,
-            Mode::Trace => TRACE_HELP,
             Mode::Domain => DOMAIN_HELP
         };
 
@@ -1627,15 +1998,13 @@ fn bind_keys_directional(
 #[derive(Clone, Copy, Eq, PartialEq)]
 pub enum Mode {
     View,
-    Trace,
     Domain
 }
 impl Mode {
     fn next(&self) -> Mode {
         use Mode::*;
         match *self {
-            View => Domain, // TODO: View => Trace
-            Trace => Domain,
+            View => Domain,
             Domain => View
         }
     }
@@ -1720,10 +2089,6 @@ impl InputHandler {
             }
         } 
 
-        else if self.mode == Mode::Trace {
-         
-        }
-        
         else if self.mode == Mode::Domain {
             if self.domain_cooldown >= 0.1 {
                 if self.keyboard_state.key_down(MODIFIER) {
@@ -1757,16 +2122,6 @@ impl InputHandler {
         }
         
         if self.keyboard_state.key_down(MODE_SWITCH) && !switch_pressed_before {
-            // if self.keyboard_state.key_down(MODE_1) { 
-            //     self.upd.mode = self.mode != Mode::View;
-            //     self.mode = Mode::View; 
-            // } else if self.keyboard_state.key_down(MODE_2) { 
-            //     self.upd.mode = self.mode != Mode::Trace;
-            //     self.mode = Mode::Trace;
-            // } else if self.keyboard_state.key_down(MODE_3) { 
-            //     self.upd.mode = self.mode != Mode::Domain;
-            //     self.mode = Mode::Domain;
-            // }
             self.mode = self.mode.next();
             self.upd.mode = true;
         }
@@ -2091,7 +2446,6 @@ impl MulAssign for Matrix4 {
 //     }
 // }
 
-// TODO: add normals to triangle struct? for lighting
 #[derive(Clone, Copy)]
 pub struct Triangle3(pub [Vector3; 3]);
 impl Mul<Matrix4> for Triangle3 {
@@ -2133,7 +2487,6 @@ impl Sub<RVector3> for RTriangle3 {
     type Output = RTriangle3;
 
     fn sub(self, vector: RVector3) -> RTriangle3 {
-        // TODO: map
         let mut tri = RTriangle3::new();
         for i in 0..3 {
             tri.v[i] = self.v[i] - vector;
@@ -2159,7 +2512,6 @@ pub struct Quaternion {
     pub y: f32,
     pub z: f32
 }
-// TODO: default angle is pi/2 rotated on the x-axis. work that out please
 impl Default for Quaternion {
     fn default() -> Self {
         Quaternion {
@@ -2222,7 +2574,7 @@ use crate::{
     },
     generator,
     constants::*,
-    input::parser::Expr
+    expr::parser::Expr
 };
 use heapless::Vec;
 
@@ -2359,7 +2711,6 @@ impl Mesh {
         Self {
             tris: Vec::new(), 
             transformed_tris: Vec::new(),
-            // lines:  Vec::with_capacity(limits::MAX_LINES), // TODO: transform lines
             axes: [Line3([v!(0.0, 0.0, 0.0); 2]); 3],
             transformed_axes: [RLine3([RVector3::new(0, 0, 0.0); 2]); 3],
             domain: Domain::new(),
@@ -2441,7 +2792,7 @@ use crate::{
 
 pub struct Renderer {
     buffer: [Color; FB_WIDTH_SIZE * FB_HEIGHT_SIZE],
-    depth_buffer: [f16; FB_WIDTH_SIZE * FB_HEIGHT_SIZE],  // TODO: switching to f32 breaks rendering??
+    depth_buffer: [f16; FB_WIDTH_SIZE * FB_HEIGHT_SIZE],
 }
 impl Renderer {
     pub fn new() -> Self {
@@ -2456,7 +2807,7 @@ impl Renderer {
             *px = BG;
         }
         for d in self.depth_buffer.iter_mut() {
-            *d = 5.0; // TODO: stop with this nonsense (maybe?)
+            *d = 5.0;
         }
     }
 
@@ -2484,7 +2835,7 @@ impl Renderer {
                 }
 
                 // draw axes
-                let mut i = 0;  // TODO: is there rust enumerate?
+                let mut i = 0;
                 for axis in &mesh.transformed_axes {
                     let color = AXIS_COLORS[i];
                     self.fill_line(
@@ -2591,7 +2942,6 @@ impl Renderer {
         }
     }
 
-    // TEMP version
     fn fill_line(&mut self, v0: RVector3, v1: RVector3, offset_vector: RVector3, color: Color) {
         let v2 = RVector3::new(
             v0.x + 1,
@@ -2639,230 +2989,5 @@ impl Timer {
         self.fps = 1.0 / self.delta_time;
     }
 }
-==> input/parser.rs <==
-use heapless::Vec;
-use crate::{
-    constants::limits::*,
-    trig::*
-};
-
-#[derive(Debug)]
-pub enum ParserError {
-    InvalidCharacter,
-    Overflow
-}
-
-#[derive(Debug)]
-pub enum EvalError {
-    Underflow,
-    Overflow,
-    ZeroDiv
-}
-
-#[derive(Debug)]
-enum Token {
-    X, Y, Z,
-    Const(f32),
-    Add, Sub,
-    Mul, Div,
-    Pow,
-    Sin, Cos, Tan
-}
-
-pub struct Expr {
-    pub is_implicit: bool,
-    rpn: Vec<Token, MAX_TOKENS>
-}
-impl Expr {
-    pub fn new(expr: &str, is_implicit: bool) -> Result<Self, ParserError> {
-        let mut tokens = Vec::new();
-
-        for split in expr.split_whitespace() {
-            let token = match split {
-                "x" => Token::X, "y" => Token::Y, "z" => Token::Z,
-                "+" => Token::Add, "-" => Token::Sub,
-                "*" => Token::Mul, "/" => Token::Div,
-                "^" => Token::Pow,
-                "sin" => Token::Sin, "cos" => Token::Cos, "tan" => Token::Tan,
-                _ => Token::Const(
-                    split.parse()
-                        .map_err(|_| ParserError::InvalidCharacter)?
-                )
-            };
-
-            tokens.push(token).map_err(|_| ParserError::Overflow)?
-        }
-        
-        Ok(Self { 
-            is_implicit,
-            rpn: tokens
-        })
-    }
-
-    pub fn eval(&self, x: f32, y: f32, z: f32) -> Result<f32, EvalError> {
-        let mut stack: Vec<f32, PARSE_STACK> = Vec::new();
-
-        for token in self.rpn.iter() {
-            let mut result: f32;
-
-            match *token {
-                Token::X => result = x, Token::Y => result = y, Token::Z => result = z,
-                Token::Const(n) => result = n,
-
-                Token::Add => {
-                    let b = stack.pop().ok_or(EvalError::Underflow)?;
-                    let a = stack.pop().ok_or(EvalError::Underflow)?;
-                    result = a + b;
-                },
-                Token::Sub => {
-                    let b = stack.pop().ok_or(EvalError::Underflow)?;
-                    let a = stack.pop().ok_or(EvalError::Underflow)?;
-                    result = a - b;
-                },
-                Token::Mul => {
-                    let b = stack.pop().ok_or(EvalError::Underflow)?;
-                    let a = stack.pop().ok_or(EvalError::Underflow)?;
-                    result = a * b;
-                },
-                Token::Div => {
-                    let b = stack.pop().ok_or(EvalError::Underflow)?;
-                    let a = stack.pop().ok_or(EvalError::Underflow)?;
-                    if b == 0.0 { return Err(EvalError::ZeroDiv) };
-                    result = a / b;
-                },
-
-                Token::Pow => {
-                    let b = stack.pop().ok_or(EvalError::Underflow)?;
-                    let i = b as i32;   // power only works with integers
-                    // TODO: use e/ln method?
-                    let a = stack.pop().ok_or(EvalError::Underflow)?;
-                    result = 1.0;
-                    
-                    if i > 0 {
-                        for _ in 0..i {
-                            result *= a;
-                        }
-                    } else {
-                        for _ in 0..-i {
-                            result /= a;
-                        }
-                    }
-                }
-
-                Token::Sin => {
-                    let x = stack.pop().ok_or(EvalError::Underflow)?;
-                    result = sin(x);
-                },
-                Token::Cos => {
-                    let x = stack.pop().ok_or(EvalError::Underflow)?;
-                    result = cos(x);
-                },
-                Token::Tan => {
-                    let x = stack.pop().ok_or(EvalError::Underflow)?;
-                    result = sin(x) / cos(x);
-                }
-            };
-            
-            let _ = stack.push(result)
-                .map_err(|_| EvalError::Overflow);
-        }
-
-        Ok(stack.pop().ok_or(EvalError::Underflow)?)
-    }
-}
-
-
-==> input/ui.rs <==
-use crate::{
-    input::parser::Expr,
-    eadk::{
-        display::*,
-        Point,
-        Color,
-        Rect,
-        input::*
-    },
-    constants::{
-        controls::*,
-        graphics::*,
-        palette::*
-    }
-};
-#[cfg(target_os = "none")]
-use alloc::string::String;
-#[cfg(target_os = "none")]
-use alloc::format;
-
-fn write(text: &str) {
-    let text_c = format!("{}|", text);
-    push_rect_uniform(
-        Rect {
-            x: 0,
-            y: MARGIN_TOP,
-            width: SCREEN_WIDTH,
-            height: SCREEN_HEIGHT - MARGIN_TOP
-        },
-        WHITE
-    );
-
-    let limit = 30;
-    let mut line_count = 0;
-
-    let mut line = String::new();
-    for i in 0..text_c.len() {
-        line.push(text_c.as_bytes()[i] as char);
-
-        if line.len() >= limit || i >= text_c.len() - 1 {
-            draw_string(
-                line.as_str(),
-                Point {
-                    x: 10,
-                    y: (25 + 20 * line_count) as u16
-                },
-                true,
-                Color::from_rgb(0, 0, 0),
-                Color::from_rgb(255, 255, 255)
-            );
-            line.clear();
-            line_count += 1;
-        }
-    }
-}
-
-pub fn get_expr() -> Option<Expr> {
-    let mut expr = String::new();
-    
-    let mut keyboard_state = KeyboardState::scan();
-    while !keyboard_state.key_down(CONFIRM) {
-        keyboard_state = KeyboardState::scan();
-
-        use Event::*;
-        let event = event_get(200);
-        
-        if event == Backspace {
-            expr.pop();
-            write(&expr);
-        } else {
-            let c: &str = match event {
-                Shift => "z ", Alpha => "y ", Xnt => "x ",
-                Zero => "0", One => "1", Two => "2", Three => "3", Four => "4", 
-                Five => "5", Six => "6", Seven => "7", Eight => "8", Nine => "9",
-                Plus => "+ ", Minus => "- ", Multiplication => "* ", Division => "/ ",
-                Power => "^ ",
-                Sine => "sin ", Cosine => "cos ", Tangent => "tan ",
-                EXE => " ",
-                _ => ""
-            };
-
-            if c != "" {
-                expr.push_str(c);
-                write(&expr);
-            }
-        }
-
-        if keyboard_state.key_down(EXIT) { return None }
-    }
-
-    Some(Expr::new(&expr, true).unwrap())
-}
 ```
+
