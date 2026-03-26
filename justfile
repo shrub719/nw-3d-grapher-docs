@@ -9,9 +9,9 @@ convert-no-mermaid:
 convert:
     pandoc docs/*/*.md --css docs/style.css --toc --toc-depth=2 -s -F mermaid-filter -o result.html   
 
-[default]
 build: flatten convert
 
+[default]
 build-no-mermaid: flatten convert-no-mermaid
 
 commit:

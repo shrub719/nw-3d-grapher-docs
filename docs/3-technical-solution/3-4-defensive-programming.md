@@ -1,6 +1,6 @@
 ## 3.4 Defensive programming
 
-### Assertions
+<!--### Assertions-->
 
 <!--TODO-->
 
