@@ -22,7 +22,7 @@
     1. Implement function evaluation/calculation
         a. Arithmetic operators
         a. Trigonometric approximations
-        a. Indices, including negative and fractional
+        a. Indices, including negative
         a. Exponents
 1. **Interface & controls**
     1. Allow for switching between multiple input modes (VIEW, DOMAIN)

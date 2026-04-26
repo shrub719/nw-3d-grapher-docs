@@ -18,15 +18,16 @@ However, each language has its advantages: C is the most lightweight, and typica
 the easiest to write clean, efficient code for. C++'s object oriented additions as
 a superset of C gives greater structure while adding complexity. Rust is a more modern
 language similar in level to C++, while capable of producing faster programs. <!-- maybe work on these descriptions.. -->  
-Due to my personal experience with C/C++ and the complexity of the project, C++ will
-be the language of choice for the 3D Grapher.
+Despite my personal experience with C/C++, the complexity of the project and importance
+of speed make Rust my language of choice for the 3D Grapher.
 
 In addition, NumWorks details how you can develop your own [userland version of Epsilon](https://www.numworks.com/engineering/software/build/) 
 written in C++. Other developers have used this to create custom apps that function 
 just like built-in Epsilon ones, which gives greater control over the API without
 the need of the EADK as a middleman. It also gives access to tools in the Epsilon
 architecture - most importantly [Poincaré](https://www.numworks.com/engineering/software/poincare/), 
-the native mathematical expression parser, which I would use in my code.
+the native mathematical expression parser, which I would use in my code if this were
+my chosen method.
 
 ![Epsilon's architecture](https://raw.githubusercontent.com/numworks/epsilon/refs/heads/master/docs/architecture.svg)
 

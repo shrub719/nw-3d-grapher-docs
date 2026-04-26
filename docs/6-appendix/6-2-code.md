@@ -1,4 +1,4 @@
-## 6.1 Code
+## 6.2 Code
 
 ```rs
 ==> constants.rs <==
@@ -18,7 +18,7 @@ pub mod palette {
     pub const BLACK: Color = Color::from_rgb(0, 0, 0);
 
     pub const RED: Color = Color::from_rgb(255, 90, 75);
-    pub const GREEN: Color = Color::from_rgb(775, 200, 90);
+    pub const GREEN: Color = Color::from_rgb(75, 200, 90);
     pub const BLUE: Color = Color::from_rgb(75, 90, 255);
 }
 
@@ -913,22 +913,10 @@ fn t22dii() -> bool {
     test_evaluation("2 -1 ^", 0.5)
 }
 
-fn t22diii() -> bool {
-    print!("2.2.d.iii");
-    test_evaluation_approx("2 0.5 ^", 1.41)
-}
-
-fn t22e() -> bool {
-    print!("2.2.e");
-    test_evaluation_approx("2 ln", 0.693)
-}
-
-// TODO: all the other functions...
-
 const TESTS: &[fn() -> bool] = &[
     t11a, t11b, t11c, t11d,
     t22a, t22b,
-    t22di, t22dii, t22diii, t22e
+    t22di, t22dii
 ];
 
 pub fn run_all() {

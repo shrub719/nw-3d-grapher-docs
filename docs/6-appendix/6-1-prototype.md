@@ -1,0 +1,399 @@
+## 6.1 Prototype
+
+```cpp
+==> main.cpp <==
+#include "display.h"
+#include "eadkpp.h"
+#include "object.h"
+#include "rotate.h"
+#include <eadk.h>
+using namespace EADK;
+
+extern const char eadk_app_name[] __attribute__((section(".rodata.eadk_app_name"))) = "3D Points";
+extern const uint32_t eadk_api_level __attribute__((section(".rodata.eadk_api_level"))) = 0;  // i don't know what this does
+
+int main(int argc, char * argv[]) {
+    Object object;
+    bool rotationUpdate, propertyUpdate;
+    float matrix[3][3] {
+        {1.0f, 0.0f, 0.0f},
+        {0.0f, 1.0f, 0.0f},
+        {0.0f, 0.0f, 1.0f}
+    };
+    Keyboard::State keyboardState = Keyboard::scan();
+
+    Display::pushRectUniform(Screen::Rect, Color(0xFFFFFF));
+    object.draw();
+    while (!keyboardState.keyDown(Keyboard::Key::Back)) {
+        keyboardState = Keyboard::scan();
+        rotationUpdate = get_rotation(matrix, keyboardState);
+        propertyUpdate = object.get_properties(keyboardState);
+        if (rotationUpdate || propertyUpdate) {
+            object.rotate(matrix);
+            Display::pushRectUniform(Screen::Rect, Color(0xFFFFFF));
+            object.draw();
+        }
+        eadk_display_wait_for_vblank();
+    }
+}
+
+==> object.cpp <==
+#include "eadkpp.h"
+#include "display.h"
+#include "object.h"
+#include "trig.h"
+using namespace EADK;
+
+void rotate_point(float (&point)[3], float (&matrix)[3][3]) {
+    float result[3];
+    for (int i = 0; i < 3; ++i) {
+        result[i] = 0.0f;
+        for (int j = 0; j < 3; ++j) {
+            result[i] += matrix[i][j] * point[j];
+        }
+    }
+    point[0] = result[0];
+    point[1] = result[1];
+    point[2] = result[2];
+}
+
+Object::Object() {
+    load_object(2);
+    color[0] = 0.0f;
+    color[1] = 1.0f;
+    color[2] = 0.5f;
+    scale = 50;
+    size = 15;
+    to_coords();
+}
+
+void Object::load_object(int id) {
+    switch (id) {
+        case 1:
+            length = 128;
+            for (int i = 0; i < 64; i++) {
+                float t = i * 0.1f;
+                points[i][0] = better_sin(t);
+                points[i][1] = better_cos(t);
+                points[i][2] = -0.15f;
+            }
+            for (int i = 64; i < 128; i++) {
+                points[i][0] = points[i-64][0];
+                points[i][1] = points[i-64][1];
+                points[i][2] = 0.15f;
+            }
+            break;
+        case 2:
+            int i = 0;
+            for (int a = -1; a <= 1; a += 2) {
+                for (int b = -1; b <= 1; b += 2) {
+                    for (float c = -1.0f; c <= 1.0f; c += 0.2f) {
+                        points[i][0] = a;
+                        points[i][1] = b;
+                        points[i][2] = c;
+                        i++;
+                        points[i][0] = a;
+                        points[i][1] = c;
+                        points[i][2] = b;
+                        i++;
+                        points[i][0] = c;
+                        points[i][1] = a;
+                        points[i][2] = b;
+                        i++;
+                    }
+                }
+            }
+            length = i;
+    }
+}
+
+void Object::rotate(float (&matrix)[3][3]) {
+    rotate_point(points[0], matrix);
+    for (int i = 1; i < length; i++) {
+        rotate_point(points[i], matrix);
+        float key[3] = {points[i][0], points[i][1], points[i][2]};
+        int j = i - 1;
+
+        while (j >= 0 && points[j][2] > key[2]) {
+            points[j + 1][0] = points[j][0];
+            points[j + 1][1] = points[j][1];
+            points[j + 1][2] = points[j][2];
+            j -= 1;
+        }
+        points[j + 1][0] = key[0];
+        points[j + 1][1] = key[1];
+        points[j + 1][2] = key[2];
+    }
+}
+
+void Object::to_coords() {
+    for (int i = 0; i < length; i++) {
+        int x = 160 + scale * points[i][0];
+        int y = 120 + scale * points[i][1];
+        int c = (points[i][2] + 3) / 5 * 255;
+        coords[i][0] = x;
+        coords[i][1] = y;
+        coords[i][2] = c;
+    }
+}
+
+void Object::draw() {
+    int s = size / 2;
+    to_coords();
+    for (int i = 0; i < length; i++) {
+        int x = coords[i][0];
+        int y = coords[i][1];
+        int c = coords[i][2];
+        int r = color[0] * c;
+        int g = color[1] * c;
+        int b = color[2] * c;
+        int value = r * 65536 + g * 256 + b;
+        Display::pushRectUniform(Rect(x-s, y-s, size, size), Color(value));
+    }
+}
+
+bool Object::get_properties(Keyboard::State keyboardState) {
+    bool update = false;
+
+    // scale
+    if (keyboardState.keyDown(Keyboard::Key::Plus)) {
+        update = true;
+        scale += 1;
+    }
+    if (keyboardState.keyDown(Keyboard::Key::Minus)) {
+        update = true;
+        scale -= 1;
+    }
+    
+    // size
+    if (keyboardState.keyDown(Keyboard::Key::Multiplication)) {
+        update = true;
+        size += 1;
+    }
+    if (keyboardState.keyDown(Keyboard::Key::Division)) {
+        update = true;
+        size -= 1;
+    }
+
+    // object type
+    if (keyboardState.keyDown(Keyboard::Key::One)) {
+        update = true;
+        load_object(1);
+    } else if (keyboardState.keyDown(Keyboard::Key::Two)) {
+        update = true;
+        load_object(2);
+    }
+
+    // color
+    float speed = 0.05f;
+    if (keyboardState.keyDown(Keyboard::Key::Pi)) {
+        update = true;
+        color_edit(0, -speed);
+    } else if (keyboardState.keyDown(Keyboard::Key::Imaginary)) {
+        update = true;
+        color_edit(0, speed);
+    }
+    if (keyboardState.keyDown(Keyboard::Key::Sqrt)) {
+        update = true;
+        color_edit(1, -speed);
+    } else if (keyboardState.keyDown(Keyboard::Key::Comma)) {
+        update = true;
+        color_edit(1, speed);
+    }
+    if (keyboardState.keyDown(Keyboard::Key::Square)) {
+        update = true;
+        color_edit(2, -speed);
+    } else if (keyboardState.keyDown(Keyboard::Key::Power)) {
+        update = true;
+        color_edit(2, speed);
+    }
+
+    return update;
+}
+
+void Object::color_edit(int value, float increaseBy) {
+    color[value] += increaseBy;
+    if (color[value] <= 0.0f) {
+        color[value] = 0.0f;
+    } else if (color[value] >= 1.0f) {
+        color[value] = 1.0f;
+    }
+}
+
+==> rotate.cpp <==
+#include "eadkpp.h"
+#include "trig.h"
+using namespace EADK;
+
+// const float a = 0.05;
+// const float s = approx_sin(a);
+// const float c = approx_cos(a);
+
+void matrix_mul(float (&multiplier)[3][3], float (&matrix)[3][3]) {
+    float result[3][3];
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 3; j++) {
+            float sum = 0.0f;
+            for (int k = 0; k < 3; k++) {
+                sum += multiplier[i][k] * matrix[k][j];
+            }
+            result[i][j] = sum;
+        }
+    }
+
+    for (int i = 0; i < 3; i ++) {
+        for (int j = 0; j < 3; j++) {
+            matrix[i][j] = result[i][j];
+        }
+    }
+}
+
+bool get_input(int (&input)[3], Keyboard::State keyboardState) {
+    int x = 0;
+    int y = 0;
+    int z = 0;
+
+    if (keyboardState.keyDown(Keyboard::Key::Up)) {
+        x = 1;
+    } else if (keyboardState.keyDown(Keyboard::Key::Down)) {
+        x = -1;
+    }
+    if (keyboardState.keyDown(Keyboard::Key::Right)) {
+        y = 1;
+    } else if (keyboardState.keyDown(Keyboard::Key::Left)) {
+        y = -1;
+    }
+    if (keyboardState.keyDown(Keyboard::Key::Alpha)) {
+        z = 1;
+    } else if (keyboardState.keyDown(Keyboard::Key::Shift)) {
+        z = -1;
+    }
+    
+    input[0] = x;
+    input[1] = y;
+    input[2] = z;
+
+    return (x != 0) || (y != 0) || (z != 0);
+}
+
+bool get_rotation(float (&matrix)[3][3], Keyboard::State keyboardState) {
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 3; j++) {
+            if (i == j) {
+                matrix[i][j] = 1.0f;
+            } else {
+                matrix[i][j] = 0.0f;
+            }
+        }
+    }
+    
+    int input[3];
+    bool update = get_input(input, keyboardState);
+    float S = approx_sin(0.02f);
+    float C = approx_cos(0.02f);
+
+    if (input[0] != 0) {
+        float s = S;
+        float c = C;
+        if (input[0] == -1) {
+            s = -s;
+        }
+
+        float r[3][3] = {
+            {1.0f, 0.0f, 0.0f},
+            {0.0f, c, -s},
+            {0.0f, s, c}
+        };
+        matrix_mul(r, matrix);
+    }
+    if (input[1] != 0) {
+        float s = S;
+        float c = C;
+        if (input[1] == -1) {
+            s = -s;
+        }
+
+        float r[3][3] = {
+            {c, 0.0f, s},
+            {0.0f, 1.0f, 0.0f},
+            {-s, 0.0f, c}
+        };
+        matrix_mul(r, matrix);
+    }
+    if (input[2] != 0) {
+        float s = S;
+        float c = C;
+        if (input[2] == -1) {
+            s = -s;
+        }
+
+        float r[3][3] = {
+            {c, -s, 0.0f},
+            {s, c, 0.0f},
+            {0.0f, 0.0f, 1.0f}
+        };
+        matrix_mul(r, matrix);
+    }
+
+    return update;
+}
+
+==> trig.cpp <==
+constexpr float PI = 3.14159265f;
+constexpr float TWO_PI = 6.28318531f;
+
+float wrap_pi(float x) {
+    while (x < 0.0f)
+        x += TWO_PI;
+    while (x >= TWO_PI)
+        x -= TWO_PI;
+
+    if (x >= PI)
+        x -= TWO_PI;
+
+    return x;
+}
+
+float approx_sin(float x) {
+    x = wrap_pi(x);
+    const float x3 = x * x * x;
+    const float x5 = x3 * x * x;
+    const float x7 = x5 * x * x;
+    return x - x3 / 6.0f + x5 / 120.0f - x7 / 5040.0f;
+}
+
+float approx_cos(float x) {
+    x = wrap_pi(x);
+    const float x2 = x * x;
+    const float x4 = x2 * x * x;
+    const float x6 = x4 * x * x;
+    return 1 - x2 / 2.0f + x4 / 24.0f - x6 / 720.0f;
+}
+
+float better_sin(float x) {
+    x = wrap_pi(x);
+    const float x3 = x * x * x;
+    const float x5 = x3 * x * x;
+    const float x7 = x5 * x * x;
+    const float x9 = x7 * x * x;
+    return x - x3 / 6.0f + x5 / 120.0f - x7 / 5040.0f + x9 / 362880.0f;
+}
+
+float better_cos(float x) {
+    x = wrap_pi(x);
+    const float x2 = x * x;
+    const float x4 = x2 * x * x;
+    const float x6 = x4 * x * x;
+    const float x8 = x6 * x * x;
+    return 1 - x2 / 2.0f + x4 / 24.0f - x6 / 720.0f + x8 / 40320.0f;
+}
+```
+
+The prototype accomplished the specified targets, and ran with very good performance,
+proving the utility of low-level languages to optimise my final project. I was able
+to devise and test a proper input schematic which I detail in my design section.
+
+I received significant insight into the workings of NumWorks' syscall bindings to
+Ion - this prototype helped me discover visual bugs and best practises to avoid them,
+as well as the convention of working with the KeyboardState object.
+

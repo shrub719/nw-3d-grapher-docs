@@ -2,7 +2,7 @@
 
 This project aims to streamline the use of 3D graphs in a classroom environment; 
 §therefore, my proposed solution is a third-party app for the NumWorks calculator 
-written in C++. This app is able to take implicit and explicit equations like the 
+written in Rust. This app is able to take implicit and explicit equations like the 
 NumWorks Grapher and display them similar to the fx-CG50's 3D Graph program.
 
 This balances performance on embedded hardware with accessibility to students,
